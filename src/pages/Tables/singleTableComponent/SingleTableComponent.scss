@@ -1,0 +1,58 @@
+.single-table-component{
+    width: 120px;
+    height: 120px;
+    background-color: #e5e5e6;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+    cursor: pointer;
+
+    .table-name{
+        h1{
+            font-size: 1.8rem;
+        }
+    }
+
+    .order-time,.guests{
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 5px;
+      
+        padding: 5px 0px;
+        p{
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #575764;
+        }
+    }
+
+}
+
+
+.available{
+    background-color: #e5e5e6;
+}
+
+.occupied{
+   background-color: #eeb200;
+   color: white;
+
+   .order-time,.guests{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+  
+    padding: 5px 0px;
+    p{
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: white;
+    }
+}
+}
