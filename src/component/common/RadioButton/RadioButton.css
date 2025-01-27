@@ -1,0 +1,36 @@
+.radio-button-group {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 8px;
+}
+
+.radio-button {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 8px;
+  font-family: Arial, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.radio-label {
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+input[type="radio"] {
+  cursor: pointer;
+  accent-color: #007bff;
+  /* Change to your preferred theme color */
+}
+/*# sourceMappingURL=RadioButton.css.map */

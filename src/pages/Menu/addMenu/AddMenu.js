@@ -4,6 +4,7 @@ import CustomDropdown from "../../../component/common/DropDownButton/DropDownBut
 import Input from "../../../component/common/input/Input";
 import { axiosClient } from "../../../utils/axiosCLient";
 import RadioButton from "../../../component/common/RadioButton/RadioButton";
+import { useSelector } from "react-redux";
 
 function AddMenu({ open, setToggle ,update}) {
   const [name, setName] = useState("");
@@ -12,6 +13,8 @@ function AddMenu({ open, setToggle ,update}) {
   const [categoryOption, setCategoryOption] = useState(null);
   const [type, setType] = useState();
   const [selectedCategory,setSelectedCategory]=useState("");
+
+  const userInfo = useSelector((state) => state.UserReducer.owner);
 
   const RadioOptions = [
     { label: "Veg", value: "true" },
@@ -30,7 +33,7 @@ function AddMenu({ open, setToggle ,update}) {
     console.log(selectedCategory)
     try {
       const response=await axiosClient.post('/menu/add-menu',{
-        restroId:"6766eecdfae318648d9368ee",
+        restroId:userInfo.restaurant._id,
       name:name,
       description:description,
       price:price,
@@ -47,7 +50,7 @@ function AddMenu({ open, setToggle ,update}) {
       setType("");
       setToggle();
 
-      update({category:selectedCategory,menuId:response.data.result.savedMenu._id})
+      update({category:selectedCategory,menuId:response.result.savedMenu._id})
     } catch (error) {
       console.log(error);
     }
@@ -56,9 +59,9 @@ function AddMenu({ open, setToggle ,update}) {
   async function GetCategory() {
     try {
       const response = await axiosClient.get("/category/get-categories", {
-        params: { restaurantId: "6766eecdfae318648d9368ee" },
+        params: { restaurantId: userInfo.restaurant._id },
       });
-      const categories = response?.data?.result?.categories;
+      const categories = response?.result?.categories;
 
       setCategoryOption(categories);
       console.log(categories);

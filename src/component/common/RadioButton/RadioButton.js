@@ -2,6 +2,7 @@ import React from "react";
 import './RadioButton.scss'
 
 const RadioButton = ({ options, name, selectedValue, onChange }) => {
+  console.log(selectedValue);
   return (
     <div className="radio-button-group">
       {options.map((option, index) => (

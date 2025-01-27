@@ -1,0 +1,19 @@
+.signup{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .form-section{
+        padding: 15px;
+        width: 30%;
+        height: fit-content;
+        border: 1px solid black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 15px;
+    }
+}

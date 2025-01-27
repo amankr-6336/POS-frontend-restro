@@ -4,9 +4,14 @@ import "./Table.scss";
 import SingleTableComponent from "./singleTableComponent/SingleTableComponent";
 import { axiosClient } from "../../utils/axiosCLient";
 import TableDetail from "./TableDetail/TableDetail";
+import AddTable from "./AddTable/AddTable";
+import { useSelector } from "react-redux";
 function Table() {
   const [tableList, setTableList] = useState([]);
   const [selectedTable, setSelectedTable] = useState(null);
+  const [tableDialog,setTableDialog]=useState(false);
+  
+  const userInfo = useSelector((state) => state.UserReducer.owner);
 
   useEffect(() => {
     getTableList();
@@ -17,20 +22,34 @@ function Table() {
   async function getTableList() {
     try {
       const response = await axiosClient.get("/table/get-table", {
-        params: { restaurantId: "6766eecdfae318648d9368ee" },
+        params: { restaurantId: userInfo.restaurant._id },
       });
-      console.log(response?.data?.result?.tables);
-      setTableList(response?.data?.result?.tables);
-      setSelectedTable(response?.data?.result?.tables[0]);
+      console.log(response);
+      setTableList(response?.result?.tables);
+      setSelectedTable(response?.result?.tables[0]);
     } catch (error) {
       console.log(error);
     }
   }
-
+  
+  function HandleToggleTableDialog(){
+      setTableDialog(!tableDialog)
+  }
   return (
     <div className="table">
       <div className="top-section">
-        <Header title={"Table"} />
+        <Header title={"Table"}
+          open={tableDialog}
+          setToggle={setTableDialog}
+          dialogContent={
+            tableDialog && (
+              <AddTable
+                open={tableDialog}
+                setToggle={HandleToggleTableDialog}
+                update={getTableList}
+              />
+            )
+          } />
       </div>
       <div className="bottom-section">
         <div className="listing-section">

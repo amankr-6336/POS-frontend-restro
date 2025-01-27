@@ -9,6 +9,7 @@ import Button from "../../component/common/button/Button";
 import Dialog from "../../component/common/dialog/Dialog";
 import Input from "../../component/common/input/Input";
 import AddMenu from "./addMenu/AddMenu";
+import { useSelector } from "react-redux";
 
 function Menu() {
   const [categories, setCategories] = useState(null);
@@ -20,6 +21,8 @@ function Menu() {
   const [addcatdescription, setaddcatdescription] = useState("");
   const [menuDialog, setMenuDialog] = useState(false);
 
+  const userInfo = useSelector((state) => state.UserReducer.owner);
+
   useEffect(() => {
     GetCategory();
   }, []);
@@ -27,9 +30,9 @@ function Menu() {
   async function GetCategory() {
     try {
       const response = await axiosClient.get("/category/get-categories", {
-        params: { restaurantId: "6766eecdfae318648d9368ee" },
+        params: { restaurantId: userInfo.restaurant._id},
       });
-      const categories = response?.data?.result?.categories;
+      const categories = response?.result?.categories;
 
       setCategories(categories);
       if (categories && categories.length > 0) {
@@ -37,7 +40,7 @@ function Menu() {
         setSelectedCategory(firstCategory);
         await getMenuForCategory(firstCategory);
       }
-      setSelectedCategory(response?.data?.result?.categories[0]);
+      setSelectedCategory(response?.result?.categories[0]);
 
       console.log(response);
     } catch (error) {
@@ -57,7 +60,7 @@ function Menu() {
       });
       // console.log(response.data.result.menus);
 
-      const menus = response?.data?.result?.menus || [];
+      const menus = response?.result?.menus || [];
       setMenu(menus);
       if (menuId) {
         console.log("inside if else");
@@ -81,7 +84,7 @@ function Menu() {
   async function handleAddCategory() {
     try {
       const response = await axiosClient.post("/category/create-category", {
-        restaurantId: "6766eecdfae318648d9368ee",
+        restaurantId: userInfo.restaurant._id,
         name: addCategory,
         description: addcatdescription,
       });

@@ -1,0 +1,85 @@
+.table {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead {
+    background-color: white;
+    position: sticky;
+    top: 0; /* Keeps the header at the top */
+    z-index: 1; /* Ensures header is above body content */
+    box-shadow: 0px 4px 4px -2px #e5e5e7, 0px 1px 0px #e5e5e7;
+    tr {
+      th {
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+    }
+  }
+
+  th,
+  td {
+    padding: 12px 12px;
+    // border: 1px solid #ccc;
+    text-align: left;
+  }
+  tbody {
+    .active {
+      background-color: #f5f6f7;
+      border-bottom: 1.2px solid white;
+    }
+    tr {
+      border-bottom: 1.2px solid #e5e5e7;
+
+      td {
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #575764;
+      }
+    }
+
+    p {
+      padding: 5px 8px;
+      width: fit-content;
+      border-radius: 3px;
+      color: white;
+    }
+    .paid {
+      background-color: #575764;
+    }
+    .served {
+      background-color: #008d96;
+    }
+    .preparing {
+      background-color: #eeb200;
+    }
+    .orderConfirmed{
+      background-color: #e96f16;
+    }
+    
+  }
+}
+
+.table::-webkit-scrollbar {
+  width: 5px;
+}
+
+.table::-webkit-scrollbar-track {
+  background: #f5f6f7;
+}
+
+/* Handle */
+.table::-webkit-scrollbar-thumb {
+  background: #e5e5e7;
+  border-radius: 50px;
+}
+
+/* Handle on hover */
+.table::-webkit-scrollbar-thumb:hover {
+  background: #e5e5e7;
+}
