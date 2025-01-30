@@ -9,18 +9,27 @@
     gap: 10px;
     .table-number{
         width: 100%;
-        height: 50px;
+        height: 30px;
         padding: 5px 0px;
+        display: flex;
+        justify-content: left;
+        align-items: center;
       
     }
     .qr-code{
         width: 100%;
-        height: 70%;
-        // border: 2px solid red;
-        img{
-            width: 100%;
-            height: 100%;
-            object-fit:contain;
+        height: fit-content;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+       
+    }
+    .other-detail{
+        display: flex;
+        gap: 5px;
+        p{
+           font-size: 0.9rem;
         }
     }
 }

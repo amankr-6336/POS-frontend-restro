@@ -3,7 +3,7 @@ import "./OrderDetail.scss";
 import CustomDropdown from "../../../component/common/DropDownButton/DropDownButton";
 import RadioButton from "../../../component/common/RadioButton/RadioButton";
 import { axiosClient } from "../../../utils/axiosCLient";
-function OrderDetail({ data }) {
+function OrderDetail({ data,update ,orders}) {
   console.log(data);
   const[status,setStatus]=useState();
 
@@ -18,13 +18,23 @@ function OrderDetail({ data }) {
     HandleChangeOrderStatus();
   },[status])
 
-   async function HandleChangeOrderStatus(){
+   async function HandleChangeOrderStatus(value){
     try {
         const response=await axiosClient.post('/order/update-order',{
             orderId:data._id,
             status:status
         })
         console.log(response);
+        const updatedOrder = response.result;
+        if(response){
+          update((prevOrders) => 
+            prevOrders.map((order) =>
+              order._id === updatedOrder._id ? { ...order, status: updatedOrder.status } : order
+            )
+          );
+        }
+    
+      
     } catch (error) {
         console.log(error);
     }

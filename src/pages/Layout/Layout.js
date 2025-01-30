@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 // icons
 import { PiPicnicTableBold } from "react-icons/pi";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
@@ -7,6 +7,7 @@ import { CgNotes } from "react-icons/cg";
 import { MdAnalytics } from "react-icons/md";
 import { IoMdNotifications } from "react-icons/io";
 import { IoIosSettings } from "react-icons/io";
+import { CiLogout } from "react-icons/ci";
 // imports
 import "./Layout.scss";
 import { axiosClient } from "../../utils/axiosCLient";
@@ -20,7 +21,7 @@ function Layout() {
   const [name, setName] = useState("");
   const [address, setaddress] = useState("");
   const [phone, setPhone] = useState("");
-
+  const navigate=useNavigate();
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.UserReducer.owner);
   console.log(userInfo);
@@ -94,12 +95,24 @@ function Layout() {
     }
   }
 
+  async function handleLogout() {
+    try {
+      // dispatch(setLoading(true));
+      await axiosClient.post('/auth/logout');
+      localStorage.removeItem('accessToken');
+      navigate('/login');
+      // dispatch(setLoading(false));
+    } catch (error) {
+       console.log(error);
+    }
+  }
+
   return (
     <>
       <div className="main">
         <div className="navigation-menu">
           <div className="logo-section">
-             {userInfo.restaurant && <p>Restro</p> }
+             {userInfo?.restaurant && <p>Restro</p> }
           </div>
 
           <div className="menu">
@@ -126,10 +139,13 @@ function Layout() {
               ))}
             </ul>
           </div>
+          <div className="logout">
+            <CiLogout onClick={handleLogout}/>
+            </div>
         </div>
 
         <div className="main-layout">
-          {userInfo.restaurant ? (
+          {userInfo?.restaurant ? (
             <Outlet />
           ) : (
             <div className="prompt-message">

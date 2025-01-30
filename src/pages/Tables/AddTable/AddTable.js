@@ -5,11 +5,12 @@ import Dialog from "../../../component/common/dialog/Dialog";
 import Input from "../../../component/common/input/Input";
 import { axiosClient } from "../../../utils/axiosCLient";
 import { useSelector } from "react-redux";
+import { useApi } from "../../../services/UseApi";
 
 function AddTable({ open, setToggle, update }) {
   const [tableNumber, setTableNumber] = useState("");
   const userInfo = useSelector((state) => state.UserReducer.owner);
-
+  const addTableApi=useApi()
   async function HandleAddTable() {
     try {
       const response = await axiosClient.post("/table/create-table", {
@@ -17,7 +18,9 @@ function AddTable({ open, setToggle, update }) {
         tableNumber: tableNumber,
       });
       console.log(response);
-      update();
+      if(response){
+        update((prevTables)=>[...prevTables,response.result.savedTable])
+      }
       setToggle();
     } catch (error) {
         console.log(error);

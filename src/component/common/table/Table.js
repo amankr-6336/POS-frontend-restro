@@ -46,8 +46,8 @@ function Table({ data,selected,onSelect }) {
         </thead>
 
         <tbody>
-          {data.map((data, index) => (
-            <tr onClick={()=>onSelect(data)} className={`${data._id === selected._id ? "active" : ""}`} key={index}>
+          {data?.map((data, index) => (
+            <tr onClick={()=>onSelect(data)} className={`${data?._id === selected?._id ? "active" : ""}`} key={index}>
               <td>T-{data?.table?.tableNumber}</td>
               <td>#{processId(data._id)}</td>
               <td>{data?.user}</td>

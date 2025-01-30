@@ -8,6 +8,7 @@ import Table from '../../component/common/table/Table';
 import { data } from 'react-router-dom';
 import OrderDetail from './OrderDetail/OrderDetail';
 import { io } from 'socket.io-client';
+import { useSelector } from 'react-redux';
 function Order() {
 
   // const socket=io("http://localhost:4001");
@@ -15,6 +16,9 @@ function Order() {
   const [orderDialog,setOrderDialog]=useState(false);
   const [orders,setOrder]=useState([]);
   const [selected,setSelected]=useState(null);
+
+  const userInfo = useSelector((state) => state.UserReducer.owner);
+  console.log(userInfo);
 
   // socket.on("newOrder", (order) => {
   //   console.log("New order received:", order);
@@ -36,7 +40,7 @@ function Order() {
   //     socketInstance.disconnect(); // Cleanup on unmount
   //   };
   // }, []);
-  const restaurantId="6766eecdfae318648d9368ee"
+  const restaurantId=userInfo.restaurant._id;
 
   useEffect(() => {
     const socket = io("http://localhost:4001");
@@ -77,11 +81,11 @@ function Order() {
   async function handleGetOrder(){
        try {
         const response=await axiosClient.get('/order/get-order',{
-          params:{restaurantId:"6766eecdfae318648d9368ee"}
+          params:{restaurantId: userInfo.restaurant._id}
         })
-        console.log(response?.data?.result);
-        setOrder(response?.data?.result);
-        setSelected(response?.data?.result[0]);
+        console.log(response?.result);
+        setOrder(response?.result);
+        setSelected(response?.result[0]);
        } catch (error) {
         console.log(error);
        }
@@ -113,7 +117,7 @@ function Order() {
        
       </div>
       <div className="detail-view">
-          <OrderDetail data={selected}/>
+          <OrderDetail order={orders} update={setOrder} data={selected}/>
       </div>
     </div>
   </div>
