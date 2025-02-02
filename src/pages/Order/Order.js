@@ -8,71 +8,21 @@ import Table from '../../component/common/table/Table';
 import { data } from 'react-router-dom';
 import OrderDetail from './OrderDetail/OrderDetail';
 import { io } from 'socket.io-client';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import bellSound from '../../asset/warning-notification-call-184996.mp3'
+import { setOrders } from '../../redux/orderSlice/OrderReducer';
+
 function Order() {
 
   // const socket=io("http://localhost:4001");
-  const [socket, setSocket] = useState(null);
   const [orderDialog,setOrderDialog]=useState(false);
   const [orders,setOrder]=useState([]);
   const [selected,setSelected]=useState(null);
-
+  const dispatch=useDispatch()
   const userInfo = useSelector((state) => state.UserReducer.owner);
-  console.log(userInfo);
+  const OrdersList=useSelector((state)=>state.OrderReducer.orders);
+  console.log(OrdersList);
 
-  // socket.on("newOrder", (order) => {
-  //   console.log("New order received:", order);
-  //   // Update UI with the new order
-  // });
-
-  // useEffect(() => {
-  //   const socketInstance = io("http://localhost:4001");
-  //   setSocket(socketInstance);
-    
-  //   socketInstance.emit("joinRoom", { restaurantId: "6766eecdfae318648d9368ee" });
-  //   // Listen for new orders
-  //   socketInstance.on("newOrder", (order) => {
-  //     console.log("New order received:", order);
-  //     setOrder((prevOrders) => [order.order, ...prevOrders]); // Add new order to the list
-  //   });
-  
-  //   return () => {
-  //     socketInstance.disconnect(); // Cleanup on unmount
-  //   };
-  // }, []);
-  const restaurantId=userInfo.restaurant._id;
-
-  useEffect(() => {
-    const socket = io("http://localhost:4001");
-
-    const joinRoom = () => {
-      socket.emit("joinRoom", { restaurantId });
-      console.log(`Joined room: ${restaurantId}`);
-    };
-
-    // Initial connection
-    socket.on("connect", () => {
-      console.log("Connected to socket server:", socket.id);
-      joinRoom();
-    });
-
-    // Reconnection handling
-    socket.on("reconnect", () => {
-      console.log("Reconnected to socket server:", socket.id);
-      joinRoom(); // Rejoin the room after reconnection
-    });
-
-    // Listen for new orders
-    socket.on("newOrder", (order) => {
-      console.log("New order received:", order);
-      setOrder((prevOrders) => [order.order, ...prevOrders]); // Add new order to the list
-    });
-
-    // Cleanup on unmount
-    return () => {
-      socket.disconnect();
-    };
-  }, [restaurantId]);
 
   useEffect(()=>{
     handleGetOrder();
@@ -84,7 +34,9 @@ function Order() {
           params:{restaurantId: userInfo.restaurant._id}
         })
         console.log(response?.result);
-        setOrder(response?.result);
+      
+        dispatch( setOrders(response?.result))
+        // setOrder(response?.result);
         setSelected(response?.result[0]);
        } catch (error) {
         console.log(error);
@@ -112,7 +64,7 @@ function Order() {
     <div className="bottom-section">
       <div className="listing-section">
          <div className="order-table">
-              <Table data={orders} selected={selected} onSelect={setSelected} />
+              <Table data={OrdersList} selected={selected} onSelect={setSelected} />
          </div>
        
       </div>

@@ -88,10 +88,11 @@ function Menu() {
         name: addCategory,
         description: addcatdescription,
       });
-      console.log(response?.data?.status);
-      if (response?.data?.status === "ok") {
+      console.log(response.result.category);
+      if (response) {
         console.log("entered");
-        GetCategory();
+        setCategories((prevState)=>[...prevState,response.result.category]);
+        // GetCategory();
       }
       setAddCategory("");
       setaddcatdescription("");

@@ -3,10 +3,14 @@ import "./OrderDetail.scss";
 import CustomDropdown from "../../../component/common/DropDownButton/DropDownButton";
 import RadioButton from "../../../component/common/RadioButton/RadioButton";
 import { axiosClient } from "../../../utils/axiosCLient";
-function OrderDetail({ data,update ,orders}) {
+import { useDispatch } from "react-redux";
+import { updateOrderStatus } from "../../../redux/orderSlice/OrderReducer";
+import generateKOTPDF from "../../../component/KotPrint/KotPrint";
+import generateBillPDF from "../../../component/BillPrint/BillPrint";
+function OrderDetail({ data}) {
   console.log(data);
   const[status,setStatus]=useState();
-
+  const dispatch =useDispatch();
 
   useEffect(() => {
     if (data?.status) {
@@ -19,19 +23,23 @@ function OrderDetail({ data,update ,orders}) {
   },[status])
 
    async function HandleChangeOrderStatus(value){
+     console.log(data);
     try {
         const response=await axiosClient.post('/order/update-order',{
             orderId:data._id,
-            status:status
+            status:status,
+            tableId:data.table._id
         })
         console.log(response);
         const updatedOrder = response.result;
         if(response){
-          update((prevOrders) => 
-            prevOrders.map((order) =>
-              order._id === updatedOrder._id ? { ...order, status: updatedOrder.status } : order
-            )
-          );
+          dispatch(updateOrderStatus(updatedOrder));
+
+          // update((prevOrders) => 
+          //   prevOrders.map((order) =>
+          //     order._id === updatedOrder._id ? { ...order, status: updatedOrder.status } : order
+          //   )
+          // );
         }
     
       
@@ -51,6 +59,14 @@ function OrderDetail({ data,update ,orders}) {
     console.log("Selected Value:", value);
     setStatus(value);
   };
+
+  function handleKot(data){
+    generateKOTPDF(data);
+  }
+  function handleBill(data){
+    generateBillPDF(data);
+    setStatus("paid");
+  }
   return (
     <div className="order-detail">
       <div className="table-order-info">
@@ -101,8 +117,8 @@ function OrderDetail({ data,update ,orders}) {
         <h3>₹ {data?.totalPrice}</h3>
       </div>
       <div className="kot-bill-button">
-        <button style={{ backgroundColor: "#575764" }}>Print KOT</button>
-        <button style={{ backgroundColor: "#c0262d" }}>Print Bill</button>
+        <button onClick={()=>handleKot(data.kotIds)} style={{ backgroundColor: "#575764" }}>Print KOT</button>
+        <button onClick={()=> handleBill(data)} style={{ backgroundColor: "#c0262d" }}>Print Bill</button>
       </div>
     </div>
   );
