@@ -15,16 +15,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { ownerInfo } from "../../redux/UserSlice/UserReducer";
 import Dialog from "../../component/common/dialog/Dialog";
 import Input from "../../component/common/input/Input";
+import { addNotification } from "../../redux/notificationSlice/NotificationSlice";
+import Notification from "../../component/Notification/Notification";
 
 function Layout() {
   const [restroDialog, setRestroDialog] = useState(false);
   const [name, setName] = useState("");
   const [address, setaddress] = useState("");
   const [phone, setPhone] = useState("");
-  const navigate=useNavigate();
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.UserReducer.owner);
-  console.log(userInfo);
+
+  const restaurantId = userInfo?.restaurant?._id;
+
+  const notification = useSelector(
+    (state) => state.NotificationReducer.notification
+  );
+  console.log(restaurantId);
 
   const navigationOptions = [
     {
@@ -47,11 +57,11 @@ function Layout() {
       icon: <MdAnalytics />,
       path: "report",
     },
-    {
-      name: "Notice",
-      icon: <IoMdNotifications />,
-      path: "notification",
-    },
+    // {
+    //   name: "Notice",
+    //   icon: <IoMdNotifications />,
+    //   path: "notification"
+    // },
     {
       name: "Settings",
       icon: <IoIosSettings />,
@@ -60,22 +70,36 @@ function Layout() {
   ];
 
   useEffect(() => {
-    getOwnerInfo();
-  }, [dispatch]);
+    console.log(restaurantId);
+    if (restaurantId) {
+      console.log("enetered effefc");
+      getUnreadNotification(restaurantId);
+    }
+  }, [restaurantId]);
 
-  async function getOwnerInfo() {
+  useEffect(() => {
+    if (notification.length > 0) {
+      getUnreadNotification(restaurantId);
+    }
+  }, [notification]);
+
+  async function getUnreadNotification(restaurantId) {
     try {
-      const response = await axiosClient.get("/owner/getownerinfo");
-      console.log(response);
+      const response = await axiosClient.get(
+        "/notification/get-unread-count/",
+        {
+          params: { restaurantId },
+        }
+      );
 
       if (response) {
-        dispatch(ownerInfo(response.result));
+        console.log(response.data, "from count");
+        setUnreadNotificationCount(response?.result?.unreadCount);
       }
     } catch (error) {
       console.log(error);
     }
   }
-
 
   function handleToggleDialog() {
     setRestroDialog(!restroDialog);
@@ -98,13 +122,18 @@ function Layout() {
   async function handleLogout() {
     try {
       // dispatch(setLoading(true));
-      await axiosClient.post('/auth/logout');
-      localStorage.removeItem('accessToken');
-      navigate('/login');
+      await axiosClient.post("/auth/logout");
+      localStorage.removeItem("accessToken");
+      navigate("/login");
       // dispatch(setLoading(false));
     } catch (error) {
-       console.log(error);
+      console.log(error);
     }
+  }
+
+  function handleNotification() {
+    setNotificationOpen(!notificationOpen);
+    console.log("open");
   }
 
   return (
@@ -112,15 +141,20 @@ function Layout() {
       <div className="main">
         <div className="navigation-menu">
           <div className="logo-section">
-             {userInfo?.restaurant && <p>Restro</p> }
+            {userInfo?.restaurant && <p>Restro</p>}
           </div>
 
           <div className="menu">
             <ul style={{ listStyleType: "none", padding: 0 }}>
               {navigationOptions.map((item, index) => (
-                <li key={index}>
+                <li
+                  key={index}
+                  onClick={
+                    item.name === "notice" ? handleNotification : undefined
+                  }
+                >
                   <NavLink
-                    to={item.path}
+                    to={item?.path}
                     style={({ isActive }) => ({
                       textDecoration: "none",
                       color: isActive ? "blue" : "black",
@@ -137,11 +171,29 @@ function Layout() {
                   </NavLink>
                 </li>
               ))}
+              <li
+                onClick={handleNotification}
+                style={{ padding: "8px", marginTop: "0px", cursor: "pointer" }}
+              >
+                <span>
+                  <IoMdNotifications />
+                  <p>{unreadNotificationCount}</p>
+                </span>
+                <p>Notice</p>
+              </li>
             </ul>
           </div>
           <div className="logout">
-            <CiLogout onClick={handleLogout}/>
-            </div>
+            <CiLogout onClick={handleLogout} />
+          </div>
+
+          {notificationOpen && (
+            <Notification
+              open={notificationOpen}
+              onClose={setNotificationOpen}
+              count={unreadNotificationCount}
+            />
+          )}
         </div>
 
         <div className="main-layout">

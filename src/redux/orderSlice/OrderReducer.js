@@ -8,6 +8,7 @@ const orderSlice=createSlice({
 
     reducers:{
         addOrder: (state, action) => {
+            console.log(action.payload);
             state.orders = [action.payload, ...state.orders]; // Add new order at the beginning
           },
         setOrders: (state, action) => {

@@ -12,6 +12,11 @@ import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { addOrder } from "./redux/orderSlice/OrderReducer";
 import bellSound from "./asset/warning-notification-call-184996.mp3";
+import notificationSound from './asset/mixkit-correct-answer-tone-2870 (1).wav'
+import Notification from "./component/Notification/Notification";
+import { addNotification } from "./redux/notificationSlice/NotificationSlice";
+import { axiosClient } from "./utils/axiosCLient";
+import { ownerInfo } from "./redux/UserSlice/UserReducer";
 
 const socket = io("http://localhost:4001", { autoConnect: false });
 
@@ -42,14 +47,61 @@ function App() {
       audio.play().catch((error) => console.error("Audio play error:", error));
 
       // Dispatch new order to Redux
-      dispatch(addOrder(order.order));
+      dispatch(addOrder(order));
     });
+
+    socket.on("newOrderNotification", (notification) => {
+      console.log(`Notification for Restaurant ${restaurantId}:`, notification);
+      setTimeout(() => {
+        const audio = new Audio(notificationSound);
+        audio.play().catch((error) => console.error("Audio play error:", error));
+      }, 200); 
+      dispatch(addNotification(notification));
+    });
+
+
 
     return () => {
       socket.disconnect();
       setIsSocketConnected(false);
     };
   }, [restaurantId, dispatch]); // Runs only when restaurantId is available
+
+  useEffect(()=>{
+   getOwnerInfo();
+  },[])
+
+
+   async function getOwnerInfo() {
+      try {
+        const response = await axiosClient.get("/owner/getownerinfo");
+        console.log(response);
+  
+        if (response) {
+          dispatch(ownerInfo(response.result));
+        }
+        if (response.result.restaurant) {
+          const restaurantId = response.result.restaurant._id;
+          getNotification(restaurantId);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+     async function getNotification(restaurantId) {
+        try {
+          const response = await axiosClient.get("/notification/get-notice", {
+            params: {restaurantId},
+          });
+          console.log(response);
+          if (response) {
+            dispatch(addNotification(response.result));
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
 
   return (
     <Routes element={<RequireUser />}>
@@ -58,7 +110,6 @@ function App() {
         <Route path="menu" element={<Menu />} />
         <Route path="order" element={<Order />} />
         <Route path="report" />
-        <Route path="notification" />
         <Route path="setting" />
       </Route>
       <Route>
