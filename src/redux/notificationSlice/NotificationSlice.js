@@ -15,6 +15,12 @@ const notificationSlice=createSlice({
             state.notification.unshift(action.payload); // ✅ Adds single notification
         }
     },
+    markAllAsRead: (state) => {
+        state.notification.forEach(notification => {
+            notification.isRead = true;
+        });
+        console.log(state.notification);
+    } 
     
   
 }
@@ -22,4 +28,4 @@ const notificationSlice=createSlice({
 
 
 export default notificationSlice.reducer;
-export const{addNotification}=notificationSlice.actions;
+export const{addNotification,markAllAsRead}=notificationSlice.actions;

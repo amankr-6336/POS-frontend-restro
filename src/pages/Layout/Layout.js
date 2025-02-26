@@ -192,6 +192,7 @@ function Layout() {
               open={notificationOpen}
               onClose={setNotificationOpen}
               count={unreadNotificationCount}
+              setCount={setUnreadNotificationCount}
             />
           )}
         </div>

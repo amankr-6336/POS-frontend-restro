@@ -7,39 +7,44 @@ import { IoCloseOutline } from "react-icons/io5";
 import { axiosClient } from "../../utils/axiosCLient";
 import { markAllAsRead } from "../../redux/notificationSlice/NotificationSlice";
 
-function Notification({ open, onClose, count }) {
+function Notification({ open, onClose, count,setCount }) {
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.UserReducer.owner);
   const restaurantId = userInfo?.restaurant?._id;
   const notification = useSelector(
     (state) => state.NotificationReducer.notification
   );
+  console.log(notification);
 
   const notificationIcon = {
     order: <GiFireBowl />,
     query: <MdOutlineNotificationImportant />,
   };
 
-//   useEffect(() => {
-//     if (open) {
-//       if(count>0){
-//          MarkNotificationAsRead();
-//       }
+  useEffect(() => {
+    if (open) {
+      if(count>0){
+         MarkNotificationAsRead();
+      }
      
-//     }
-//   }, [open]);
+    }
+  }, [open]);
 
-//   async function MarkNotificationAsRead() {
-//     try {
-//       const response = await axiosClient.post("/notification/mark-allread", {
-//         restaurantId: restaurantId,
-//       });
-//       console.log(response);
+  async function MarkNotificationAsRead() {
+    try {
+      const response = await axiosClient.post("/notification/mark-allread", {
+        restaurantId: restaurantId,
+      });
+      console.log(response);
+      if(response){
+        dispatch(markAllAsRead());
+        setCount(0);
+      }
    
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div className="notification">
