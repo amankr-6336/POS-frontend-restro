@@ -13,6 +13,7 @@ function AddMenu({ open, setToggle ,update}) {
   const [categoryOption, setCategoryOption] = useState(null);
   const [type, setType] = useState();
   const [selectedCategory,setSelectedCategory]=useState("");
+  const [image,setImage]=useState("");
 
   const userInfo = useSelector((state) => state.UserReducer.owner);
 
@@ -39,7 +40,8 @@ function AddMenu({ open, setToggle ,update}) {
       price:price,
       categoryId:selectedCategory._id,
       isVeg:type,
-      isStock:true
+      isStock:true,
+      image:image
       })
       console.log(response);
 

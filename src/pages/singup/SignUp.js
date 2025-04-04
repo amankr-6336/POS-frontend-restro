@@ -24,7 +24,7 @@ function SignUp() {
             console.log(response);
             if(response){
                 localStorage.setItem("accessToken",response.result.accessToken);
-                navigate('/');
+                navigate('/space');
                 setEmail("");
                 setName("");
                 setPassword("");
@@ -50,6 +50,7 @@ function SignUp() {
                 Sign Up
             </Button>
         </div>
+        <p>Already have an Account ? <strong onClick={()=>navigate('/login')}>Login</strong></p>
       </div>
     </div>
   );

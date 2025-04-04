@@ -46,9 +46,10 @@ function Login() {
 
         <div className="form-button-navigation">
           <Button size="small" onClick={handleLoginfunction}>
-            Sign Up
+            Login
           </Button>
         </div>
+        <p>New user ? click on <strong onClick={()=> navigate("/signup")}> Signup </strong></p>
       </div>
     </div>
   );

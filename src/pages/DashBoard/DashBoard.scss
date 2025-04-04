@@ -1,0 +1,48 @@
+.dashboard{
+    background-color: #f5f6f7;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    .top-section{
+        background-color: white;
+    }
+    .bottom-section{
+        width: 100%;
+        height: fit-content;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      overflow-y: scroll;
+      .first-row{
+        height: 300px;
+        display: flex;
+        gap: 40px;
+        .total-overview{
+            flex: 2;
+            height: 100%;
+        }
+        .occupancy-rate{
+            flex: 3;
+            height: 100%;
+        }
+        
+      }
+      .second-row{
+        height: 1000px;
+        display: flex;
+        gap: 40px;
+        // border: 2px solid red;
+        .top-dishes,.top-category{
+          height: 100%;
+          flex: 1;
+        }
+      }
+    }
+}
+
+.bottom-section::-webkit-scrollbar{
+  display: none;
+}

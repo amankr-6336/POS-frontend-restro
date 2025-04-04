@@ -17,9 +17,13 @@ import Dialog from "../../component/common/dialog/Dialog";
 import Input from "../../component/common/input/Input";
 import { addNotification } from "../../redux/notificationSlice/NotificationSlice";
 import Notification from "../../component/Notification/Notification";
+import restroLogo from '../../asset/optimized_restaurant_logo.png'
 
 function Layout() {
+  const userInfo = useSelector((state) => state.UserReducer.owner);
+  const restaurantId = userInfo?.restaurant?._id;
   const [restroDialog, setRestroDialog] = useState(false);
+  const [isLoading,setIsLoading]=useState(true);
   const [name, setName] = useState("");
   const [address, setaddress] = useState("");
   const [phone, setPhone] = useState("");
@@ -27,9 +31,6 @@ function Layout() {
   const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.UserReducer.owner);
-
-  const restaurantId = userInfo?.restaurant?._id;
 
   const notification = useSelector(
     (state) => state.NotificationReducer.notification
@@ -57,11 +58,6 @@ function Layout() {
       icon: <MdAnalytics />,
       path: "report",
     },
-    // {
-    //   name: "Notice",
-    //   icon: <IoMdNotifications />,
-    //   path: "notification"
-    // },
     {
       name: "Settings",
       icon: <IoIosSettings />,
@@ -73,6 +69,7 @@ function Layout() {
     console.log(restaurantId);
     if (restaurantId) {
       console.log("enetered effefc");
+      setIsLoading(false)
       getUnreadNotification(restaurantId);
     }
   }, [restaurantId]);
@@ -112,10 +109,10 @@ function Layout() {
         address,
         phone,
       });
-
-      console.log(response);
     } catch (error) {
       console.log(error);
+    } finally {
+      setRestroDialog(false);
     }
   }
 
@@ -141,7 +138,7 @@ function Layout() {
       <div className="main">
         <div className="navigation-menu">
           <div className="logo-section">
-            {userInfo?.restaurant && <p>Restro</p>}
+            {userInfo?.restaurant?.name && <img src={restroLogo} alt={restroLogo} /> }
           </div>
 
           <div className="menu">
@@ -198,7 +195,9 @@ function Layout() {
         </div>
 
         <div className="main-layout">
-          {userInfo?.restaurant ? (
+          {isLoading ? (
+            <p className="prompt-message">Loading...</p> // Show a loading message instead of the prompt
+          ) : restaurantId ? (
             <Outlet />
           ) : (
             <div className="prompt-message">

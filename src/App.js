@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import {Router, Route, Routes } from "react-router-dom";
 import Layout from "./pages/Layout/Layout";
 import Table from "./pages/Tables/Table";
 import Menu from "./pages/Menu/Menu";
@@ -17,6 +17,8 @@ import Notification from "./component/Notification/Notification";
 import { addNotification } from "./redux/notificationSlice/NotificationSlice";
 import { axiosClient } from "./utils/axiosCLient";
 import { ownerInfo } from "./redux/UserSlice/UserReducer";
+import DashBoard from "./pages/DashBoard/DashBoard";
+import LandingPage from "./pages/LandingPage/LandingPage";
 
 const socket = io("http://localhost:4001", { autoConnect: false });
 
@@ -104,19 +106,28 @@ function App() {
       }
 
   return (
-    <Routes element={<RequireUser />}>
-      <Route path="/" element={<Layout />}>
-        <Route path="table" element={<Table />} />
-        <Route path="menu" element={<Menu />} />
-        <Route path="order" element={<Order />} />
-        <Route path="report" />
-        <Route path="setting" />
-      </Route>
-      <Route>
+    
+      <Routes>
+        {/* Unprotected Landing Page Route */}
+        <Route path="/home" element={<LandingPage />} />
+
+        {/* Authentication Routes (Unprotected) */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-      </Route>
-    </Routes>
+
+        {/* Protected Routes */}
+         <Route element={<RequireUser/>}>
+          <Route path="/dashboard" element={<Layout />}>
+            <Route path="table" element={<Table />} />
+            <Route path="menu" element={<Menu />} />
+            <Route path="order" element={<Order />} />
+            <Route path="report" element={<DashBoard />} />
+            <Route path="setting" element={<div>Settings Page</div>} /> {/* Placeholder */}
+          </Route>
+         </Route> 
+       
+      </Routes>
+   
   );
 }
 

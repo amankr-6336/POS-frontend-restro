@@ -5,7 +5,7 @@ function OnlyifNotLoggedIn() {
     const user=localStorage.getItem("accessToken");
 
   return (
-    user? <Navigate to='/' /> : <Navigate to='/login' />
+    user? <Navigate to='/dashboard' /> : <Navigate to='/login' />
   )
 }
 

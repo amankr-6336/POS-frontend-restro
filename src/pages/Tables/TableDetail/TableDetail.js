@@ -1,9 +1,12 @@
 import React from "react";
 import "./TableDetail.scss";
 import QRCodeGenerator from "../../../component/QRCodegenertor/QRCode";
+import { useSelector } from "react-redux";
 
 function TableDetail({ data }) {
   console.log(data);
+  const userInfo = useSelector((state) => state.UserReducer.owner);
+  console.log(userInfo);
   return (
     <div className="tableDetail">
       <div className="table-number">
@@ -13,7 +16,7 @@ function TableDetail({ data }) {
         {/* <img src={data?.qrCode} alt="" /> */}
         <QRCodeGenerator
           qrCode={data?.qrCode} // Your QR Code Base64
-          restroName="The Gourmet Bistro"
+          restroName={userInfo?.restaurant?.name}
           tableNumber={data?.tableNumber} 
         />
       </div>

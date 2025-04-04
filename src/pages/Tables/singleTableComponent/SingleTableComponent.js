@@ -10,7 +10,7 @@ function SingleTableComponent({data,onSelect}) {
         </div>
        
         <div className="guests">
-            <IoPeople style={{ color: `${data.status==="available"?"#575764":"white"}`}}/> <p>2 People</p>
+            <IoPeople style={{ color: `${data.status==="available"?"#575764":"white"}`}}/> <p>{data?.tableCapacity} People</p>
         </div>
      </div>
   )

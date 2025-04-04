@@ -5,7 +5,7 @@ import SingleTableComponent from "./singleTableComponent/SingleTableComponent";
 import TableDetail from "./TableDetail/TableDetail";
 import AddTable from "./AddTable/AddTable";
 import { useSelector } from "react-redux";
-import { useApi } from "../../services/UseApi";
+import {useApi} from '../../services/UseApi'
 import { getTables } from "../../services/Table.api";
 function Table() {
   const [tableList, setTableList] = useState([]);
@@ -16,11 +16,16 @@ function Table() {
 
   useEffect(() => {
     getTableList();
+    // getTables()
+    // getTables({restaurantId: userInfo.restaurant._id,setTableList})
   }, []);
+
+  // getTables({restaurantId: userInfo.restaurant._id})
+  
 
   // get the list of Tables
   async function getTableList() {
-    const {success,data}= await getTableApi.execute({restaurantId: userInfo.restaurant._id})
+    const {success,data}=await getTableApi.execute({restaurantId: userInfo.restaurant._id})
     console.log(success,data);
     if(success){
       setTableList(data?.result?.tables);
