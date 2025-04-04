@@ -1,0 +1,40 @@
+.total-occupancy-cards{
+    width: 100%;height: 100%;
+    // display: flex;
+    // flex-wrap: wrap;
+    // align-items: center;
+    // justify-content: space-between;
+    display: grid;
+    grid-template-columns: auto auto ;
+
+    .overview-box{
+        margin: 10px;
+        // width: 200px;
+        // height: 90px;
+        border-radius: 5px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.04);
+        gap: 15px;
+        p{
+            color: white;
+        }
+        .title{
+            p{
+                font-size: 0.8rem;
+                font-weight: 400;
+            }
+        }
+        .infos{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            p{
+                font-size: 1.1rem;
+                font-weight: 500;
+            }
+        }
+    }
+}
