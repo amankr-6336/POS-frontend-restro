@@ -62,7 +62,7 @@ function Notification({ open, onClose, count,setCount }) {
             <div className="icon">{notificationIcon[data.type]}</div>
             <p>{data.message} </p>
           </div>
-        ))}
+        )).reverse()}
       </div>
     </div>
   );

@@ -24,7 +24,7 @@ function SignUp() {
             console.log(response);
             if(response){
                 localStorage.setItem("accessToken",response.result.accessToken);
-                navigate('/space');
+                navigate('/dashboard/setting');
                 setEmail("");
                 setName("");
                 setPassword("");

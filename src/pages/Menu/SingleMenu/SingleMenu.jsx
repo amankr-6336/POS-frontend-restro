@@ -1,7 +1,7 @@
 import React from "react";
 import "./SingleMenu.scss";
-import dish from "../../../asset/dishimg.png";
-import { TbBowlSpoonFilled } from "react-icons/tb";
+// import dish from "../../../asset/dishimg.png";
+import fallbackimage from '../../../asset/fallback_dish_image_500x500.webp'
 import { PiEmpty } from "react-icons/pi";
 function SingleMenu({ data, onSet }) {
   return (
@@ -10,7 +10,8 @@ function SingleMenu({ data, onSet }) {
       onClick={() => onSet(data)}
     >
       <div className="dish-img">
-        <TbBowlSpoonFilled style={{ width: "100%", fontSize: "5rem" }} />
+        {/* <TbBowlSpoonFilled style={{ width: "100%", fontSize: "5rem" }} /> */}
+        <img src={data?.image?.url? data?.image?.optimized: fallbackimage } alt="" />
       </div>
       <div className="name-price">
         <p id="name">{data?.name}</p>

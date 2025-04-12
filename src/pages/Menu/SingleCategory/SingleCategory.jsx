@@ -3,7 +3,7 @@ import './SingleCategory.scss'
 
 function SingleCategory({data,selected,setSelectedCategory}) {
   return (
-    <div onClick={()=>setSelectedCategory(data)} className={`single-category ${selected._id===data._id?"selected":"not-selected"} `}>
+    <div onClick={()=>setSelectedCategory(data)} className={`single-category ${selected?._id===data?._id?"selected":"not-selected"} `}>
          <p>{data?.name}</p>
     </div>
   )

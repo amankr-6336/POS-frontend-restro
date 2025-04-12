@@ -1,0 +1,40 @@
+.setting-container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    .setting-restro-info{
+        min-height: 400px;
+        display: flex;
+        
+        .left{
+            width: 50%;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            .restro-detail{
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                p{
+                    font-size: 0.7rem;
+                    font-weight: 500;
+                    color: #575764;
+                }
+                h3{
+                    font-size: 1rem;
+                    font-weight: 500;
+                    color: black;
+                }
+            }
+        }
+
+        .right{
+            width: 50%;
+           
+            padding: 15px;
+        }
+    }
+}

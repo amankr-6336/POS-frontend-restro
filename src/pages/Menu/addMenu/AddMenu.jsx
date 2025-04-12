@@ -5,15 +5,19 @@ import Input from "../../../component/common/input/Input";
 import { axiosClient } from "../../../utils/axiosCLient";
 import RadioButton from "../../../component/common/RadioButton/RadioButton";
 import { useSelector } from "react-redux";
+import { BsCardImage } from "react-icons/bs";
+import './AddMenu.scss'
+import { IoSparklesSharp } from "react-icons/io5";
+import Button from "../../../component/common/button/Button";
 
-function AddMenu({ open, setToggle ,update}) {
+function AddMenu({ open, setToggle, update }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [categoryOption, setCategoryOption] = useState(null);
   const [type, setType] = useState();
-  const [selectedCategory,setSelectedCategory]=useState("");
-  const [image,setImage]=useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [image, setImage] = useState("");
 
   const userInfo = useSelector((state) => state.UserReducer.owner);
 
@@ -26,23 +30,23 @@ function AddMenu({ open, setToggle ,update}) {
     GetCategory();
   }, []);
 
-   async function HandleaddMenu() {
+  async function HandleaddMenu() {
     console.log(name);
     console.log(description);
     console.log(price);
     console.log(type);
-    console.log(selectedCategory)
+    console.log(selectedCategory);
     try {
-      const response=await axiosClient.post('/menu/add-menu',{
-        restroId:userInfo.restaurant._id,
-      name:name,
-      description:description,
-      price:price,
-      categoryId:selectedCategory._id,
-      isVeg:type,
-      isStock:true,
-      image:image
-      })
+      const response = await axiosClient.post("/menu/add-menu", {
+        restroId: userInfo.restaurant._id,
+        name: name,
+        description: description,
+        price: price,
+        categoryId: selectedCategory._id,
+        isVeg: type,
+        isStock: true,
+        image: image,
+      });
       console.log(response);
 
       setName("");
@@ -52,7 +56,10 @@ function AddMenu({ open, setToggle ,update}) {
       setType("");
       setToggle();
 
-      update({category:selectedCategory,menuId:response.result.savedMenu._id})
+      update({
+        category: selectedCategory,
+        menuId: response.result.savedMenu._id,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -76,6 +83,31 @@ function AddMenu({ open, setToggle ,update}) {
     console.log("Selected Value:", value);
     setType(value);
   };
+
+  const handleImageChange = (e) => {
+    console.log(e.target.value);
+    const file = e.target.files[0];
+    console.log(file);
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+    fileReader.onload = () => {
+      if (fileReader.readyState === fileReader.DONE) {
+        setImage(fileReader.result);
+        console.log("img data", fileReader.result);
+      }
+    };
+  };
+
+  async function handledescriptionGeneration(){
+    try {
+      const response = await axiosClient.post('/generate/description',{dishName:name});
+      console.log(response);
+      setDescription(response?.result)
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
   return (
     <div className="add-menu">
       <Dialog
@@ -100,19 +132,37 @@ function AddMenu({ open, setToggle ,update}) {
           // onSelect={(selected) => setSelectedCategory(selected)}
           onSelect={setSelectedCategory}
         />
+        <div className="description-generation">
+          <Input
+            label="Menu description"
+            name="description"
+            value={description}
+            textArea={true}
+            button={true}
+            buttoninfo={{title:"Generate",icon:<IoSparklesSharp/>,onsubmit:handledescriptionGeneration }}
+            onChange={setDescription}
+          />
+          <Button icon={<IoSparklesSharp/>} type="magic" size="small" title="Generate description" onClick={handledescriptionGeneration}  >Auto generate</Button>
+        </div>
 
-        <Input
-          label="Menu description"
-          name="description"
-          value={description}
-          onChange={setDescription}
-        />
         <Input
           label="Menu price"
           name="price"
           value={price}
           onChange={setPrice}
         />
+        <div style={{ width: "100%", margin: "5px 0px" }}>
+          {/* <label htmlFor="inputImg" className="labelImg">
+            <BsCardImage />
+          </label> */}
+          <input
+            style={{ color: "#575764" }}
+            id="inputImg"
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+        </div>
       </Dialog>
     </div>
   );

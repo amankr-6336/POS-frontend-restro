@@ -99,7 +99,7 @@ function OrderDetail({ data}) {
           </div>
         </div>
         {data?.items.map((data, index) => (
-          <div className="item-body">
+          <div key={index} className="item-body">
             <div className="item-name">
               <p>{data?.menuItem?.name}</p>
             </div>

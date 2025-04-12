@@ -11,11 +11,12 @@ import { CiLogout } from "react-icons/ci";
 // imports
 import "./Layout.scss";
 import { axiosClient } from "../../utils/axiosCLient";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Dialog from "../../component/common/dialog/Dialog";
 import Input from "../../component/common/input/Input";
 import Notification from "../../component/Notification/Notification";
 import restroLogo from '../../asset/optimized_restaurant_logo.png'
+import { ownerInfo } from "../../redux/UserSlice/UserReducer";
 
 function Layout() {
   const userInfo = useSelector((state) => state.UserReducer.owner);
@@ -28,6 +29,7 @@ function Layout() {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
   const navigate = useNavigate();
+  const dispatch=useDispatch();
 
 
   const notification = useSelector(
@@ -65,9 +67,9 @@ function Layout() {
 
   useEffect(() => {
     console.log(restaurantId);
+    setIsLoading(false)
     if (restaurantId) {
       console.log("enetered effefc");
-      setIsLoading(false)
       getUnreadNotification(restaurantId);
     }
   }, [restaurantId]);
@@ -76,7 +78,7 @@ function Layout() {
     if (notification.length > 0) {
       getUnreadNotification(restaurantId);
     }
-  }, [notification]);
+  }, [notification,restaurantId]);
 
   async function getUnreadNotification(restaurantId) {
     try {
@@ -108,6 +110,10 @@ function Layout() {
         phone,
       });
       console.log(response);
+      if(response){
+        const response = await axiosClient.get("/owner/getownerinfo");
+        dispatch(ownerInfo(response.result));
+      }
     } catch (error) {
       console.log(error);
     } finally {

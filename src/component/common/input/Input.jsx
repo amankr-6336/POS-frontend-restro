@@ -9,6 +9,7 @@
 // export default Input;
 
 //Styles
+import Button from "../button/Button";
 import "./Input.scss";
 
 const Input = ({
@@ -20,7 +21,7 @@ const Input = ({
   className,
   disabled = false,
   textArea = false,
-  error = ""
+  error = "",
 }) => {
   return (
     <>

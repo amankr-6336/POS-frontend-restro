@@ -10,6 +10,7 @@ import Dialog from "../../component/common/dialog/Dialog";
 import Input from "../../component/common/input/Input";
 import AddMenu from "./addMenu/AddMenu";
 import { useSelector } from "react-redux";
+import EmptyState from "../../component/emptystate/EmptyState";
 
 function Menu() {
   const [categories, setCategories] = useState(null);
@@ -30,7 +31,7 @@ function Menu() {
   async function GetCategory() {
     try {
       const response = await axiosClient.get("/category/get-categories", {
-        params: { restaurantId: userInfo.restaurant._id},
+        params: { restaurantId: userInfo.restaurant._id },
       });
       const categories = response?.result?.categories;
 
@@ -49,10 +50,10 @@ function Menu() {
   }
 
   useEffect(() => {
-    getMenuForCategory({category:selectedCategory,menuId:null});
+    getMenuForCategory({ category: selectedCategory, menuId: null });
   }, [selectedCategory]);
 
-  async function getMenuForCategory({category, menuId}) {
+  async function getMenuForCategory({ category, menuId }) {
     console.log(menuId);
     try {
       const response = await axiosClient.get("/menu/get-menu", {
@@ -91,7 +92,7 @@ function Menu() {
       console.log(response.result.category);
       if (response) {
         console.log("entered");
-        setCategories((prevState)=>[...prevState,response.result.category]);
+        setCategories((prevState) => [...prevState, response.result.category]);
         // GetCategory();
       }
       setAddCategory("");
@@ -162,15 +163,32 @@ function Menu() {
               />
             ))}
           </div>
-          <div className="menu-listing">
-            {menu?.map((item, index) => (
-              <SingleMenu onSet={setDetail} data={item} key={index} />
-            ))}
+          {categories?.length != 0 ? (
+            menu?.length>0 ? (
+              <div className="menu-listing">
+                {menu?.map((item, index) => (
+                  <SingleMenu onSet={setDetail} data={item} key={index} />
+                ))}
+              </div>
+            ) : (
+              <EmptyState
+                subtext="Add Menu for this category"
+              />
+            )
+          ) : (
+            <div className="menu-listing">
+              <EmptyState
+                boldtext="No Category found"
+                subtext="Please create Category to Add Menu"
+              />
+            </div>
+          )}
+        </div>
+        {selectedCategory && (
+          <div className="detail-view">
+            <MenuDetail data={detail} update={getMenuForCategory} />
           </div>
-        </div>
-        <div className="detail-view">
-          <MenuDetail data={detail} update={getMenuForCategory} />
-        </div>
+        )}
       </div>
     </div>
   );

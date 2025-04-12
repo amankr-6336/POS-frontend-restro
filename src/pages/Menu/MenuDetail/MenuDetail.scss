@@ -53,9 +53,18 @@
     .menu-description{
         color: #575764;
         font-size: 0.8rem;
+        max-height: 15%;
+       
         #heading{
             font-size: 0.85rem;
             font-weight: 500;
+        }
+        p{
+            display: -webkit-box;
+            -webkit-line-clamp: 3;   /* Show only 2 lines */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
     .menu-nutrition{

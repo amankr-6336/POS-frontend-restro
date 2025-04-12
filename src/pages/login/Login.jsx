@@ -18,7 +18,7 @@ function Login() {
       })
       if(response){
          localStorage.setItem("accessToken",response.result.accessToken);
-         navigate('/');
+         navigate('/dashboard/setting');
          setEmail("");
          setPassword("");
      }

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./MenuDetail.scss";
 import { FaRegEdit } from "react-icons/fa";
-import bg from "../../../asset/henrique-felix-dMFIBmDYaIQ-unsplash.jpg";
 import veg from "../../../asset/304248.png";
 import nonVeg from "../../../asset/download (1).png";
 import Dialog from "../../../component/common/dialog/Dialog";
@@ -10,6 +9,7 @@ import CustomDropdown from "../../../component/common/DropDownButton/DropDownBut
 import RadioButton from "../../../component/common/RadioButton/RadioButton";
 import { axiosClient } from "../../../utils/axiosCLient";
 import StockSwitch from "../../../component/common/Switchbutton/SwitchButton";
+import fallbackmenuimage from '../../../asset/fallback_dish_image_500x500.webp'
 function MenuDetail({ data, update }) {
   const [updateMenuDialog, setUpdateMenuDailog] = useState(false);
   const [name, setName] = useState("");
@@ -119,13 +119,12 @@ function MenuDetail({ data, update }) {
         <FaRegEdit onClick={handleCloseUpdateMenuDailog} />
       </div>
       <div className="menu-images">
-        <img src={bg} alt="" />
+        <img src={data?.image?.url? data?.image?.url: fallbackmenuimage  } alt="" />
       </div>
       <div className="menu-description">
         <p id="heading">Description</p>
         <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic fuga
-          laudantium illum, iste aliquid recusandae maiores error iusto.
+          {data?.description}
         </p>
       </div>
       <div className="menu-category">
