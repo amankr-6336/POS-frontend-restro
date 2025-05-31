@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import "./Header.scss";
 import { IoAdd } from "react-icons/io5";
 import Button from "../common/button/Button";
+import CustomDropdown from "../common/DropDownButton/DropDownButton";
 
-function Header({ title, open, setToggle ,dialogContent }) {
+function Header({ title, buttonNeeded=false,filter=false ,open, setToggle, dialogContent ,filterContent }) {
   const [dateTime, setDateTime] = useState(new Date());
-  
+
   useEffect(() => {
     const interval = setInterval(() => {
       setDateTime(new Date());
@@ -28,29 +29,40 @@ function Header({ title, open, setToggle ,dialogContent }) {
     hour12: true, // Use 12-hour format with AM/PM
   });
 
-  function handleToggle(){
-    setToggle(!open)
-  }
+  // function handleToggle() {
+  //   setToggle(!open);
+  // }
 
   return (
     <>
-    <div className="header">
-      <div className="title">
-        <p>{title}</p>
-        <div className="add-table-button">
-          <Button onClick={()=> setToggle(!open)} type="no-border" size="medium">
-            <IoAdd style={{ fontSize: "1rem" }} /> Add New {title}
-          </Button>
+      <div className="header">
+        <div className="title">
+          <p>{title}</p>
+          {buttonNeeded &&<div className="add-table-button">
+            <Button
+              onClick={() => setToggle(!open)}
+              type="no-border"
+              size="medium"
+            >
+              <IoAdd style={{ fontSize: "1rem" }} /> Add New {title}
+            </Button>
+          </div>}
+          {/* <AddMenu open={open} setToggle={setToggle}/> */}
         </div>
-        {/* <AddMenu open={open} setToggle={setToggle}/> */}
-      </div>
 
-      <div className="time-date">
-        <p>{formattedDate} | {formattedTime}</p>
+        <div className="filter-date">
+          {filter && <div className="filter">
+            {filterContent}
+          </div>}
+
+          <div className="time-date">
+            <p>
+              {formattedDate} | {formattedTime}
+            </p>
+          </div>
+        </div>
       </div>
-       
-    </div>
-     {dialogContent}
+      {dialogContent}
     </>
   );
 }

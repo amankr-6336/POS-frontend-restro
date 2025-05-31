@@ -19,6 +19,7 @@ function MenuDetail({ data, update }) {
   const [type, setType] = useState();
   const [selectedCategory, setSelectedCategory] = useState("");
   const [Stock ,setStock]=useState();
+  const restaurantId = localStorage.getItem("restaurantId");
 
   console.log(data);
   const RadioOptions = [
@@ -44,7 +45,7 @@ function MenuDetail({ data, update }) {
   async function GetCategory() {
     try {
       const response = await axiosClient.get("/category/get-categories", {
-        params: { restaurantId: "6766eecdfae318648d9368ee" },
+        params: { restaurantId: restaurantId },
       });
       const categories = response?.data?.result?.categories;
 

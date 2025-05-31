@@ -2,31 +2,50 @@ import React, { useState } from "react";
 import "./Login.scss";
 import Input from "../../component/common/input/Input";
 import Button from "../../component/common/button/Button";
-import { axiosClient } from "../../utils/axiosCLient";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addNotification } from "../../redux/notificationSlice/NotificationSlice";
+import { ownerInfo } from "../../redux/UserSlice/UserReducer";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+import { handleLogin } from "../../services/Auth.api";
+import useApi from "../../hooks/useApi";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
+  const handleLoginApi=useApi(handleLogin);
 
-  async function handleLoginfunction (){
-   try {
-      const response=await axiosClient.post('/auth/login',{
-         email:email,
-         password:password,
-      })
-      if(response){
-         localStorage.setItem("accessToken",response.result.accessToken);
-         navigate('/dashboard/setting');
-         setEmail("");
-         setPassword("");
-     }
-
-   } catch (error) {
+  async function handleLoginfunction() {
+    try {
+      const {success,data}= await handleLoginApi.execute({email,password});
+      if (success) {
+        localStorage.setItem("accessToken", data.result.accessToken);
+        navigate("/dashboard/setting");
+        setEmail("");
+        setPassword("");
+      }
+    } catch (error) {
       console.log(error);
-   }
+    }
   }
+  
+  // async function getNotification(restaurantId) {
+  //   try {
+  //     const response = await axiosClient.get("/notification/get-notice", {
+  //       params: { restaurantId },
+  //     });
+  //     console.log(response);
+  //     if (response) {
+  //       dispatch(addNotification(response.result));
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   return (
     <div className="login">
@@ -49,7 +68,25 @@ function Login() {
             Login
           </Button>
         </div>
-        <p>New user ? click on <strong onClick={()=> navigate("/signup")}> Signup </strong></p>
+
+        <div className="other-option">
+          <GoogleLogin
+            onSuccess={(credentialResponse) => {
+              const decoded = jwtDecode(credentialResponse.credential);
+              console.log("User Info:", decoded);
+              console.log(credentialResponse.credential);
+              
+            }}
+            onError={() => {
+              console.log("login failed");
+            }}
+          />
+        </div>
+
+        <p>
+          New user ? click on{" "}
+          <strong onClick={() => navigate("/signup")}> Signup </strong>
+        </p>
       </div>
     </div>
   );

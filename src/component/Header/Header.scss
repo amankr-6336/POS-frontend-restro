@@ -24,13 +24,27 @@
             }
         }
     }
-    .time-date{
-        p{
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: #575764;
-            
+
+    .filter-date{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+
+        .filter{
+    
         }
+
+        .time-date{
+            p{
+                font-size: 0.9rem;
+                font-weight: 500;
+                color: #575764;
+                
+            }
+        }
+
     }
+   
   
 }

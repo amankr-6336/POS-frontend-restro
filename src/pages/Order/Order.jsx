@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./Order.scss";
 import Header from "../../component/Header/Header";
 import AddMenu from "../Menu/addMenu/AddMenu";
-import { axiosClient } from "../../utils/axiosCLient";
 // import axios from 'axios';
 import Table from "../../component/common/table/Table";
 // import { data } from 'react-router-dom';
@@ -12,9 +11,10 @@ import { useDispatch, useSelector } from "react-redux";
 // import bellSound from '../../asset/warning-notification-call-184996.mp3'
 import { setOrders } from "../../redux/orderSlice/OrderReducer";
 import EmptyState from "../../component/emptystate/EmptyState";
+import useApi from "../../hooks/useApi";
+import { handlegetOrders } from "../../services/Order.api";
 
 function Order() {
-  // const socket=io("http://localhost:4001");
   const [orderDialog, setOrderDialog] = useState(false);
   const [orders, setOrder] = useState();
   const [selected, setSelected] = useState(null);
@@ -23,20 +23,17 @@ function Order() {
   const OrdersList = useSelector((state) => state.OrderReducer.orders);
   console.log(OrdersList);
 
+  const getOrdersApi=useApi(handlegetOrders);
+
   useEffect(() => {
     handleGetOrder();
   }, []);
 
   async function handleGetOrder() {
     try {
-      const response = await axiosClient.get("/order/get-order", {
-        params: { restaurantId: userInfo.restaurant._id },
-      });
-      console.log(response?.result);
-
-      dispatch(setOrders(response?.result));
-      // setOrder(response?.result);
-      setSelected(response?.result[0]);
+      const {data}=await getOrdersApi.execute({ restaurantId: userInfo.restaurant._id })
+      dispatch(setOrders(data?.result));
+      setSelected(data?.result[0]);
     } catch (error) {
       console.log(error);
     }

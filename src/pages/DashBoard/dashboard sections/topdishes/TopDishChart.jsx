@@ -20,9 +20,9 @@ const renderCustomizedLabel = ({
   index,
 }) => {
   const RADIAN = Math.PI / 180;
-  const x1 = cx + (outerRadius + 5) * Math.cos(-midAngle * RADIAN); // End X of first line (vertical)
-  const y1 = cy + (outerRadius + 15) * Math.sin(-midAngle * RADIAN); // End Y of first line (vertical)
-  const x2 = x1 + (x1 > cx ? 20 : -20); // End X of second line (horizontal)
+  const x1 = cx + (outerRadius + 30) * Math.cos(-midAngle * RADIAN); // End X of first line (vertical)
+  const y1 = cy + (outerRadius + 2) * Math.sin(-midAngle * RADIAN); // End Y of first line (vertical)
+  const x2 = x1 + (x1 > cx ? 15 : -15); // End X of second line (horizontal)
   const y2 = y1 - 10; // Move slightly upwards
 
   return (
@@ -76,9 +76,11 @@ const TopDishesPieChart = ({ data }) => {
   // const COLORS = ["#008d96","#e96f16","#eeb200","#575764","#c0262d"];
   const COLORS = ["#eeb200", "#F3C733", "#F7DA66", "#FAE799", "#FDF3CC"];
 
+  console.log(data);
+
   return (
-    <ResponsiveContainer width="100%" height={200}>
-      <PieChart width="100%" height="100%">
+    <ResponsiveContainer width="100%" height={200} >
+      <PieChart width="100%" height="100%" >
         <Pie
           data={data}
           cx="70%"
@@ -86,12 +88,12 @@ const TopDishesPieChart = ({ data }) => {
           innerRadius="00%"
           outerRadius="90%"
           fill="#8884d8"
-          dataKey="orders"
-          nameKey="dish"
+          dataKey="quantity"
+          nameKey="name"
           label={renderCustomizedLabel} // Custom Label
           labelLine={false}
         >
-          {data.map((entry, index) => (
+          {data?.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>

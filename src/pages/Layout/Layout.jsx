@@ -15,27 +15,37 @@ import { useDispatch, useSelector } from "react-redux";
 import Dialog from "../../component/common/dialog/Dialog";
 import Input from "../../component/common/input/Input";
 import Notification from "../../component/Notification/Notification";
-import restroLogo from '../../asset/optimized_restaurant_logo.png'
+import restroLogo from "../../asset/optimized_restaurant_logo.png";
 import { ownerInfo } from "../../redux/UserSlice/UserReducer";
+import { addNotification } from "../../redux/notificationSlice/NotificationSlice";
+import LoadingComponent from "../../component/common/LoadingComponent/LoadingComponent";
+import Button from "../../component/common/button/Button";
+import FallBack from "../../component/common/fallback/FallBack";
+import useApi from "../../hooks/useApi.js";
+import { getUserInfo, handleLogoutUser } from "../../services/Auth.api.js";
+import { handleCreateRestaurant } from "../../services/Restaurant.api.js";
 
 function Layout() {
   const userInfo = useSelector((state) => state.UserReducer.owner);
-  const restaurantId = userInfo?.restaurant?._id;
+  console.log(userInfo);
+  const restaurantId = localStorage.getItem("restaurantId");
   const [restroDialog, setRestroDialog] = useState(false);
-  const [isLoading,setIsLoading]=useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [name, setName] = useState("");
   const [address, setaddress] = useState("");
   const [phone, setPhone] = useState("");
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
   const navigate = useNavigate();
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
 
+  const getOwnerApi = useApi(getUserInfo);
+  const logoutUserApi = useApi(handleLogoutUser);
+  const addRestaurantApi = useApi(handleCreateRestaurant);
 
   const notification = useSelector(
     (state) => state.NotificationReducer.notification
   );
-  console.log(restaurantId);
 
   const navigationOptions = [
     {
@@ -66,8 +76,7 @@ function Layout() {
   ];
 
   useEffect(() => {
-    console.log(restaurantId);
-    setIsLoading(false)
+    setIsLoading(false);
     if (restaurantId) {
       console.log("enetered effefc");
       getUnreadNotification(restaurantId);
@@ -78,7 +87,23 @@ function Layout() {
     if (notification.length > 0) {
       getUnreadNotification(restaurantId);
     }
-  }, [notification,restaurantId]);
+  }, [notification, restaurantId]);
+
+  useEffect(() => {
+    const fetchOwnerInfo = async () => {
+      try {
+        const { success, data } = await getOwnerApi.execute();
+        if (success) {
+          dispatch(ownerInfo(data?.result));
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchOwnerInfo();
+  }, []);
 
   async function getUnreadNotification(restaurantId) {
     try {
@@ -104,15 +129,13 @@ function Layout() {
 
   async function handleAddrestaurant() {
     try {
-      const response = await axiosClient.post("/restaurant/create-restro", {
+      const { success, data } = await addRestaurantApi.execute({
         name,
         address,
         phone,
       });
-      console.log(response);
-      if(response){
-        const response = await axiosClient.get("/owner/getownerinfo");
-        dispatch(ownerInfo(response.result));
+      if (success) {
+        dispatch(ownerInfo(data.result.ownerInfo));
       }
     } catch (error) {
       console.log(error);
@@ -123,11 +146,11 @@ function Layout() {
 
   async function handleLogout() {
     try {
-      // dispatch(setLoading(true));
-      await axiosClient.post("/auth/logout");
-      localStorage.removeItem("accessToken");
-      navigate("/login");
-      // dispatch(setLoading(false));
+      const { success} = await logoutUserApi.execute();
+      if (success) {
+        localStorage.removeItem("accessToken");
+        navigate("/login");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -138,12 +161,16 @@ function Layout() {
     console.log("open");
   }
 
+  if (isLoading || getOwnerApi.loading) {
+    return <LoadingComponent />;
+  }
+
   return (
     <>
       <div className="main">
         <div className="navigation-menu">
           <div className="logo-section">
-            {userInfo?.restaurant?.name && <img src={restroLogo} alt={restroLogo} /> }
+            {restaurantId && <img src={restroLogo} alt={restroLogo} />}
           </div>
 
           <div className="menu">
@@ -200,21 +227,15 @@ function Layout() {
         </div>
 
         <div className="main-layout">
-          {isLoading ? (
-            <p className="prompt-message">Loading...</p> // Show a loading message instead of the prompt
-          ) : restaurantId ? (
+          {userInfo?.restaurant?._id ? (
             <Outlet />
           ) : (
-            <div className="prompt-message">
-              <p onClick={() => setRestroDialog(true)}>
-                Add Restro to use Dashboard
-              </p>
-            </div>
+            <FallBack OnOpen={handleToggleDialog} />
           )}
         </div>
       </div>
       <Dialog
-        title="Add Menu"
+        title="Add Restaurant"
         isOpen={restroDialog}
         onClose={handleToggleDialog}
         confirm={{ text: "Add Restaurant", onConfirm: handleAddrestaurant }}

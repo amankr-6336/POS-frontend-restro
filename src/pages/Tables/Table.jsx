@@ -5,7 +5,7 @@ import SingleTableComponent from "./singleTableComponent/SingleTableComponent";
 import TableDetail from "./TableDetail/TableDetail";
 import AddTable from "./AddTable/AddTable";
 import { useSelector } from "react-redux";
-import { useApi } from "../../services/UseApi";
+import useApi from "../../hooks/useApi.js";
 import { getTables } from "../../services/Table.api";
 import EmptyState from "../../component/emptystate/EmptyState";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -13,14 +13,14 @@ function Table() {
   const [tableList, setTableList] = useState([]);
   const [selectedTable, setSelectedTable] = useState(null);
   const [tableDialog, setTableDialog] = useState(false);
-  const getTableApi = useApi(getTables);
+
   const userInfo = useSelector((state) => state.UserReducer.owner);
+
+  const getTableApi = useApi(getTables);
 
   useEffect(() => {
     getTableList();
   }, []);
-
-  console.log(getTableApi.loading);
 
   // get the list of Tables
   async function getTableList() {
@@ -47,6 +47,7 @@ function Table() {
       <Header
         title={"Table"}
         open={tableDialog}
+        buttonNeeded={true}
         setToggle={setTableDialog}
         dialogContent={
           tableDialog && (

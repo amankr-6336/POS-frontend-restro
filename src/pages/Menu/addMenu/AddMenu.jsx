@@ -6,9 +6,15 @@ import { axiosClient } from "../../../utils/axiosCLient";
 import RadioButton from "../../../component/common/RadioButton/RadioButton";
 import { useSelector } from "react-redux";
 import { BsCardImage } from "react-icons/bs";
-import './AddMenu.scss'
+import "./AddMenu.scss";
 import { IoSparklesSharp } from "react-icons/io5";
 import Button from "../../../component/common/button/Button";
+import useApi from "../../../hooks/useApi";
+import {
+  handleAddMenuForCategory,
+  handleGenerateDescription,
+  handleGetCategories,
+} from "../../../services/Menu.api";
 
 function AddMenu({ open, setToggle, update }) {
   const [name, setName] = useState("");
@@ -21,6 +27,10 @@ function AddMenu({ open, setToggle, update }) {
 
   const userInfo = useSelector((state) => state.UserReducer.owner);
 
+  const addMenuApi = useApi(handleAddMenuForCategory);
+  const getCategoriesApi = useApi(handleGetCategories);
+  const generateDescriptionApi=useApi(handleGenerateDescription);
+
   const RadioOptions = [
     { label: "Veg", value: "true" },
     { label: "Non-Veg", value: "false" },
@@ -31,13 +41,8 @@ function AddMenu({ open, setToggle, update }) {
   }, []);
 
   async function HandleaddMenu() {
-    console.log(name);
-    console.log(description);
-    console.log(price);
-    console.log(type);
-    console.log(selectedCategory);
     try {
-      const response = await axiosClient.post("/menu/add-menu", {
+      const { data } = await addMenuApi.execute({
         restroId: userInfo.restaurant._id,
         name: name,
         description: description,
@@ -47,8 +52,6 @@ function AddMenu({ open, setToggle, update }) {
         isStock: true,
         image: image,
       });
-      console.log(response);
-
       setName("");
       setDescription("");
       setPrice("");
@@ -58,7 +61,7 @@ function AddMenu({ open, setToggle, update }) {
 
       update({
         category: selectedCategory,
-        menuId: response.result.savedMenu._id,
+        menuId: data.result.savedMenu._id,
       });
     } catch (error) {
       console.log(error);
@@ -67,13 +70,11 @@ function AddMenu({ open, setToggle, update }) {
 
   async function GetCategory() {
     try {
-      const response = await axiosClient.get("/category/get-categories", {
-        params: { restaurantId: userInfo.restaurant._id },
+      const { data } = await getCategoriesApi.execute({
+        restaurantId: userInfo.restaurant._id,
       });
-      const categories = response?.result?.categories;
-
+      const categories = data?.result?.categories;
       setCategoryOption(categories);
-      console.log(categories);
     } catch (error) {
       console.log(error);
     }
@@ -98,13 +99,12 @@ function AddMenu({ open, setToggle, update }) {
     };
   };
 
-  async function handledescriptionGeneration(){
+  async function handledescriptionGeneration() {
     try {
-      const response = await axiosClient.post('/generate/description',{dishName:name});
-      console.log(response);
-      setDescription(response?.result)
+      const {data}=await generateDescriptionApi.execute({dishName: name,})
+      setDescription(data?.result);
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
   }
 
@@ -139,10 +139,22 @@ function AddMenu({ open, setToggle, update }) {
             value={description}
             textArea={true}
             button={true}
-            buttoninfo={{title:"Generate",icon:<IoSparklesSharp/>,onsubmit:handledescriptionGeneration }}
+            buttoninfo={{
+              title: "Generate",
+              icon: <IoSparklesSharp />,
+              onsubmit: handledescriptionGeneration,
+            }}
             onChange={setDescription}
           />
-          <Button icon={<IoSparklesSharp/>} type="magic" size="small" title="Generate description" onClick={handledescriptionGeneration}  >Auto generate</Button>
+          <Button
+            icon={<IoSparklesSharp />}
+            type="magic"
+            size="small"
+            title="Generate description"
+            onClick={handledescriptionGeneration}
+          >
+            Auto generate
+          </Button>
         </div>
 
         <Input

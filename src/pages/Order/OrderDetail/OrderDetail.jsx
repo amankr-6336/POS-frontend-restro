@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import "./OrderDetail.scss";
 import CustomDropdown from "../../../component/common/DropDownButton/DropDownButton";
 import RadioButton from "../../../component/common/RadioButton/RadioButton";
-import { axiosClient } from "../../../utils/axiosCLient";
 import { useDispatch } from "react-redux";
 import { updateOrderStatus } from "../../../redux/orderSlice/OrderReducer";
 import generateKOTPDF from "../../../component/KotPrint/KotPrint";
 import generateBillPDF from "../../../component/BillPrint/BillPrint";
-function OrderDetail({ data}) {
-  console.log(data);
-  const[status,setStatus]=useState();
-  const dispatch =useDispatch();
+import useApi from "../../../hooks/useApi";
+import { handleOrderStatusChange } from "../../../services/Order.api";
+function OrderDetail({ data }) {
+  const [status, setStatus] = useState();
+  const dispatch = useDispatch();
+
+  const handleOrderStatusChangeApi = useApi(handleOrderStatusChange);
 
   useEffect(() => {
     if (data?.status) {
@@ -18,33 +20,23 @@ function OrderDetail({ data}) {
     }
   }, [data]);
 
-  useEffect(()=>{
+  useEffect(() => {
     HandleChangeOrderStatus();
-  },[status])
+  }, [status]);
 
-   async function HandleChangeOrderStatus(value){
-     console.log(data);
+  async function HandleChangeOrderStatus() {
     try {
-        const response=await axiosClient.post('/order/update-order',{
-            orderId:data._id,
-            status:status,
-            tableId:data.table._id
-        })
-        console.log(response);
-        const updatedOrder = response.result;
-        if(response){
-          dispatch(updateOrderStatus(updatedOrder));
-
-          // update((prevOrders) => 
-          //   prevOrders.map((order) =>
-          //     order._id === updatedOrder._id ? { ...order, status: updatedOrder.status } : order
-          //   )
-          // );
-        }
-    
-      
+      const { success, data } = await handleOrderStatusChangeApi.execute({
+        orderId: data._id,
+        status: status,
+        tableId: data.table._id,
+      });
+      const updatedOrder = data.result;
+      if (success) {
+        dispatch(updateOrderStatus(updatedOrder));
+      }
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
   }
 
@@ -54,16 +46,16 @@ function OrderDetail({ data}) {
     { label: "served", value: "served" },
     { label: "paid", value: "paid" },
   ];
-  
+
   const handleChange = (value) => {
     console.log("Selected Value:", value);
     setStatus(value);
   };
 
-  function handleKot(data){
+  function handleKot(data) {
     generateKOTPDF(data);
   }
-  function handleBill(data){
+  function handleBill(data) {
     generateBillPDF(data);
     setStatus("paid");
   }
@@ -117,8 +109,18 @@ function OrderDetail({ data}) {
         <h3>₹ {data?.totalPrice}</h3>
       </div>
       <div className="kot-bill-button">
-        <button onClick={()=>handleKot(data.kotIds)} style={{ backgroundColor: "#575764" }}>Print KOT</button>
-        <button onClick={()=> handleBill(data)} style={{ backgroundColor: "#c0262d" }}>Print Bill</button>
+        <button
+          onClick={() => handleKot(data.kotIds)}
+          style={{ backgroundColor: "#575764" }}
+        >
+          Print KOT
+        </button>
+        <button
+          onClick={() => handleBill(data)}
+          style={{ backgroundColor: "#c0262d" }}
+        >
+          Print Bill
+        </button>
       </div>
     </div>
   );

@@ -1,20 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import {BrowserRouter} from 'react-router-dom'
-import { Provider } from 'react-redux';
-import Store from './redux/Store';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import Store from "./redux/Store";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
-  
-  <React.StrictMode>
-  <Provider store={Store}>
-    <App />
-    </Provider>
-  </React.StrictMode>
+    <React.StrictMode>
+      <GoogleOAuthProvider clientId="78753556384-46rduq832370tio7u4vchbursurm3cqr.apps.googleusercontent.com">
+        <Provider store={Store}>
+          <App />
+        </Provider>
+      </GoogleOAuthProvider>
+    </React.StrictMode>
   </BrowserRouter>
 );
 

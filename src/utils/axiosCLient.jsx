@@ -21,7 +21,7 @@ axiosClient.interceptors.response.use(
       console.log(response);
      const data = response.data;
  
-     if (data.status === 'ok') {
+     if (data.status === 'success') {
        return data;
      }
  

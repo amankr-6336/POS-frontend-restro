@@ -3,20 +3,14 @@ import './DropDownButton.scss'
 
 const CustomDropdown = ({ options, placeholder,selectedValue, onSelect, displayKey }) => {
   const [isOpen, setIsOpen] = useState(false);
-  // const [selectedValue, setSelectedValue] = useState(null);
-  console.log(selectedValue?.name);
-
   const handleToggle = () => {
     setIsOpen(!isOpen);
   };
 
   const handleSelect = (value) => {
-    console.log(value);
     onSelect(value);
-    // console.log(value);
-    // setSelectedValue(value);
     setIsOpen(false);
-    // if (onSelect) onSelect(value);
+
   };
 
   return (

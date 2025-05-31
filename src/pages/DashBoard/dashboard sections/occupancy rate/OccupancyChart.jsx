@@ -1,25 +1,26 @@
 import React from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from "recharts";
 
-const data = [
-  { time: "10 AM", occupancy: 20 },
-  { time: "11 AM", occupancy: 40 },
-  { time: "12 PM", occupancy: 60 },
-  { time: "1 PM", occupancy: 80 },
-  { time: "2 PM", occupancy: 50 },
-  { time: "3 PM", occupancy: 70 },
-  { time: "4 PM", occupancy: 90 },
-  { time: "5 PM", occupancy: 60 },
-  { time: "6 PM", occupancy: 30 },
-];
+// const data = [
+//   { time: "10 AM", occupancy: 20 },
+//   { time: "11 AM", occupancy: 40 },
+//   { time: "12 PM", occupancy: 60 },
+//   { time: "1 PM", occupancy: 80 },
+//   { time: "2 PM", occupancy: 50 },
+//   { time: "3 PM", occupancy: 70 },
+//   { time: "4 PM", occupancy: 90 },
+//   { time: "5 PM", occupancy: 60 },
+//   { time: "6 PM", occupancy: 30 },
+// ];
 
-const OccupancyLineChart = () => {
+const OccupancyLineChart = ({data}) => {
+  console.log(data);
   return (
     <div className="linechart-container" style={{width:"100%" ,height:"100%"}}>
     <ResponsiveContainer width="100%" height="100%">
       <AreaChart data={data} margin={{ top: 5, right: 5, left: -15, bottom: 5 }}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="time" stroke="#e5e5e6" tickLine={false} tick={{dy:5,fill: "#575764", fontSize: 10}} />
+        <XAxis dataKey="hour" stroke="#e5e5e6" tickLine={false} tick={{dy:5,fill: "#575764", fontSize: 10}} />
         <YAxis domain={[0, 100]} stroke="#e5e5e6" tickLine={false} tick={{ dx: -10,fill: "#575764", fontSize: 10  }}/>
         <Tooltip />
         {/* <defs>
@@ -37,8 +38,8 @@ const OccupancyLineChart = () => {
           </defs>
 
         {/* <Area type="monotone" dataKey="occupancy" stroke="#eeb300" fill="#eeb300" fillOpacity={1} /> */}
-        <Area type="monotone" dataKey="occupancy" stroke="#eeb300" fill="url(#colorOccupancy)" fillOpacity={1} />
-        <Line type="monotone" dataKey="occupancy" stroke="#eeb300" strokeWidth={2} dot={{ r: 0 }} />
+        <Area type="monotone" dataKey="occupancyRate" stroke="#eeb300" fill="url(#colorOccupancy)" fillOpacity={1} />
+        <Line type="monotone" dataKey="occupancyRate" stroke="#eeb300" strokeWidth={2} dot={{ r: 0 }} />
       </AreaChart>
     </ResponsiveContainer>
     </div>

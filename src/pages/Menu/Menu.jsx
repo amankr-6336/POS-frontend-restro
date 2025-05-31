@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../component/Header/Header";
 import SingleCategory from "./SingleCategory/SingleCategory";
-import { axiosClient } from "../../utils/axiosCLient";
 import "./Menu.scss";
 import SingleMenu from "./SingleMenu/SingleMenu";
 import MenuDetail from "./MenuDetail/MenuDetail";
@@ -11,6 +10,13 @@ import Input from "../../component/common/input/Input";
 import AddMenu from "./addMenu/AddMenu";
 import { useSelector } from "react-redux";
 import EmptyState from "../../component/emptystate/EmptyState";
+import useApi from "../../hooks/useApi.js";
+import {
+  handleAddCategory,
+  handleGetCategories,
+  handleGetMenuForSingleCategory,
+} from "../../services/Menu.api.js";
+import LoadingComponent from "../../component/common/LoadingComponent/LoadingComponent.jsx";
 
 function Menu() {
   const [categories, setCategories] = useState(null);
@@ -21,56 +27,53 @@ function Menu() {
   const [addCategory, setAddCategory] = useState("");
   const [addcatdescription, setaddcatdescription] = useState("");
   const [menuDialog, setMenuDialog] = useState(false);
-
   const userInfo = useSelector((state) => state.UserReducer.owner);
+
+  const addCategoryApi = useApi(handleAddCategory);
+  const getCategoriesApi = useApi(handleGetCategories);
+  const getMenuForCategoryApi = useApi(handleGetMenuForSingleCategory);
 
   useEffect(() => {
     GetCategory();
   }, []);
 
+  useEffect(() => {
+    if (selectedCategory != null) {
+      getMenuForCategory({ category: selectedCategory, menuId: null });
+    }
+  }, [selectedCategory]);
+
   async function GetCategory() {
     try {
-      const response = await axiosClient.get("/category/get-categories", {
-        params: { restaurantId: userInfo.restaurant._id },
+      const { data } = await getCategoriesApi.execute({
+        restaurantId: userInfo.restaurant._id,
       });
-      const categories = response?.result?.categories;
-
+      const categories = data?.result?.categories;
       setCategories(categories);
       if (categories && categories.length > 0) {
         const firstCategory = categories[0];
         setSelectedCategory(firstCategory);
         await getMenuForCategory(firstCategory);
       }
-      setSelectedCategory(response?.result?.categories[0]);
-
-      console.log(response);
+      setSelectedCategory(data?.result?.categories[0]);
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
   }
 
-  useEffect(() => {
-    getMenuForCategory({ category: selectedCategory, menuId: null });
-  }, [selectedCategory]);
-
   async function getMenuForCategory({ category, menuId }) {
-    console.log(menuId);
     try {
-      const response = await axiosClient.get("/menu/get-menu", {
-        params: { categoryId: category._id },
+      const { data } = await getMenuForCategoryApi.execute({
+        categoryId: category?._id,
       });
-      // console.log(response.data.result.menus);
-
-      const menus = response?.result?.menus || [];
+      const menus = data?.result?.menus || [];
       setMenu(menus);
       if (menuId) {
-        console.log("inside if else");
-        // Find the menu with the matching ID
         const matchedMenu = menus.find((menu) => menu._id === menuId);
         console.log(matchedMenu);
-        setDetail(matchedMenu || null); // Set matched menu or null if not found
+        setDetail(matchedMenu || null);
       } else {
-        // Default to the first menu if no ID is provided
         setDetail(menus[0] || null);
       }
     } catch (error) {
@@ -82,18 +85,15 @@ function Menu() {
     setcatDialog(!catDialog);
   }
 
-  async function handleAddCategory() {
+  async function handleAddCategoryfunc() {
     try {
-      const response = await axiosClient.post("/category/create-category", {
+      const { success, data } = await addCategoryApi.execute({
         restaurantId: userInfo.restaurant._id,
         name: addCategory,
         description: addcatdescription,
       });
-      console.log(response.result.category);
-      if (response) {
-        console.log("entered");
-        setCategories((prevState) => [...prevState, response.result.category]);
-        // GetCategory();
+      if (success) {
+        setCategories((prevState) => [...prevState, data.result.category]);
       }
       setAddCategory("");
       setaddcatdescription("");
@@ -103,20 +103,17 @@ function Menu() {
     }
   }
 
-  // async function handleCreateMenu() {
-  //   try {
-  //     const response = await axiosClient.post("/menu/create-menu", {});
-  //   } catch (error) {}
-  // }
   function HandletoggleMenudialog() {
     setMenuDialog(!menuDialog);
   }
+
   return (
     <div className="table">
       <div className="top-section">
         <Header
           title={"Menu"}
           open={menuDialog}
+          buttonNeeded={true}
           setToggle={setMenuDialog}
           dialogContent={
             menuDialog && (
@@ -129,6 +126,7 @@ function Menu() {
           }
         />
       </div>
+
       <div className="bottom-section">
         <div className="listing-section">
           <div className="category-section">
@@ -136,7 +134,7 @@ function Menu() {
               isOpen={catDialog}
               onClose={handleOpen}
               title="Add Category"
-              confirm={{ text: "Add", onConfirm: handleAddCategory }}
+              confirm={{ text: "Add", onConfirm: handleAddCategoryfunc }}
             >
               <Input
                 label="Category Name"
@@ -164,16 +162,14 @@ function Menu() {
             ))}
           </div>
           {categories?.length != 0 ? (
-            menu?.length>0 ? (
+            menu?.length > 0 ? (
               <div className="menu-listing">
                 {menu?.map((item, index) => (
                   <SingleMenu onSet={setDetail} data={item} key={index} />
                 ))}
               </div>
             ) : (
-              <EmptyState
-                subtext="Add Menu for this category"
-              />
+              <EmptyState subtext="Add Menu for this category" />
             )
           ) : (
             <div className="menu-listing">

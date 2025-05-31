@@ -7,7 +7,7 @@ function DashboardBox({title="Total Overview",content}) {
          <p>{title}</p>
        </div>
        <div className="box-content">
-         {content}
+       {content}
        </div>
     </div>
   )

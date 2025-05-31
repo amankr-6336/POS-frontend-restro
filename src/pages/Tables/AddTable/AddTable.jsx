@@ -1,31 +1,32 @@
 import React, { useState } from "react";
 import "./AddTable.scss";
-import { ImOffice } from "react-icons/im";
 import Dialog from "../../../component/common/dialog/Dialog";
 import Input from "../../../component/common/input/Input";
-import { axiosClient } from "../../../utils/axiosCLient";
 import { useSelector } from "react-redux";
-import { useApi } from "../../../services/UseApi";
+import useApi from "../../../hooks/useApi";
+import { handleAddTable } from "../../../services/Table.api";
+// import { useApi } from "../../../services/UseApi";
 
 function AddTable({ open, setToggle, update }) {
   const [tableNumber, setTableNumber] = useState("");
-  const [tableCapacity,setTableCapacity]=useState("");
+  const [tableCapacity, setTableCapacity] = useState("");
   const userInfo = useSelector((state) => state.UserReducer.owner);
-  const addTableApi=useApi()
+
+  const addTableApi = useApi(handleAddTable);
+
   async function HandleAddTable() {
     try {
-      const response = await axiosClient.post("/table/create-table", {
+      const { success, data } = await addTableApi.execute({
         restroId: userInfo.restaurant._id,
         tableNumber: tableNumber,
-        tableCapacity:tableCapacity?tableCapacity:2 
+        tableCapacity: tableCapacity ? tableCapacity : 2,
       });
-      console.log(response);
-      if(response){
-        update((prevTables)=>[...prevTables,response.result.savedTable])
+      if (success) {
+        update((prevTables) => [...prevTables, data.result.savedTable]);
       }
       setToggle();
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
   }
 
