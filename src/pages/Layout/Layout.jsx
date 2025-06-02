@@ -27,7 +27,6 @@ import { handleCreateRestaurant } from "../../services/Restaurant.api.js";
 
 function Layout() {
   const userInfo = useSelector((state) => state.UserReducer.owner);
-  console.log(userInfo);
   const restaurantId = localStorage.getItem("restaurantId");
   const [restroDialog, setRestroDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(true);

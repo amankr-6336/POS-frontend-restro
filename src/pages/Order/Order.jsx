@@ -32,6 +32,7 @@ function Order() {
   async function handleGetOrder() {
     try {
       const {data}=await getOrdersApi.execute({ restaurantId: userInfo.restaurant._id })
+      console.log(data);
       dispatch(setOrders(data?.result));
       setSelected(data?.result[0]);
     } catch (error) {
@@ -57,7 +58,7 @@ function Order() {
           }
         />
       </div>
-      {OrdersList.length > 0 ? (
+      {OrdersList?.length > 0 ? (
         <div className="bottom-section">
           <div className="listing-section">
             <div className="order-table">

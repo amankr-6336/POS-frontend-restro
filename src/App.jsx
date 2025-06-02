@@ -7,7 +7,7 @@ import Login from "./pages/login/Login";
 import SignUp from "./pages/singup/SignUp";
 import RequireUser from "./utils/RequireUser";
 import OnlyifNotLoggedIn from "./utils/OnlyifNotLoggedIn";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { addOrder } from "./redux/orderSlice/OrderReducer";
@@ -20,18 +20,24 @@ import LandingPage from "./pages/LandingPage/LandingPage";
 import Setting from "./pages/Setting/Setting";
 import ClipLoader from "react-spinners/ClipLoader";
 import { SocketProvider } from "./utils/SocketContextProvider";
+// import NotificationComponent from "./component/Notification";
+import { useNotifications } from "./hooks/useNotification";
 
 
 const socket = io("http://localhost:4001", { autoConnect: false });
 
 function App() {
+  const userInfo=useSelector((state)=>state.UserReducer.owner);
+  console.log(userInfo);
   const dispatch = useDispatch();
   const Navigate = useNavigate();
-  const restaurantId = localStorage.getItem("restaurantId");
+  const restaurantId = userInfo?.restaurant?._id;
 
   const [isSocketConnected, setIsSocketConnected] = useState(false);
   console.log(isSocketConnected);
 
+  useNotifications()
+ 
   useEffect(() => {
     // Only connect socket if restaurantId is available
     if (!restaurantId) return;
@@ -92,7 +98,7 @@ function App() {
             <Route path="table" element={<Table />} />
             <Route path="menu" element={<Menu />} />
             <Route path="order" element={<Order />} />
-            <Route path="report" element={<DashBoard />} />
+            <Route path="report" element={<DashBoard/>} />
             <Route path="setting" element={<Setting />} /> {/* Placeholder */}
           </Route>
         </Route>

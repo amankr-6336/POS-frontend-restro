@@ -65,7 +65,7 @@ function Table() {
       <div style={{width:"100%",height:"100vh",display:"flex",justifyContent:"center",alignItems:"center"}}>
         <ClipLoader color="#4F46E5" size={50} />
       </div>
-    ) : getTableApi.data && tableList.length === 0 ? (
+    ) : getTableApi.data && tableList?.length === 0 ? (
       <EmptyState
         boldtext="No tables have been added yet."
         subtext="Please add tables to manage your restaurant seating."

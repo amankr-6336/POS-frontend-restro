@@ -21,7 +21,10 @@ function OrderDetail({ data }) {
   }, [data]);
 
   useEffect(() => {
-    HandleChangeOrderStatus();
+    if(status){
+          HandleChangeOrderStatus();
+    }
+   
   }, [status]);
 
   async function HandleChangeOrderStatus() {

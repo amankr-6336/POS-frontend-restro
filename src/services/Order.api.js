@@ -2,7 +2,7 @@ import { axiosClient } from "../utils/axiosCLient"
 
 export const handlegetOrders=async(restaurantId)=>{
     return axiosClient.get('/order/get-order',{
-        restaurantId
+        params:restaurantId
     })
 }
 
