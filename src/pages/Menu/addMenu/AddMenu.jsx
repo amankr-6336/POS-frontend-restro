@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Dialog from "../../../component/common/dialog/Dialog";
 import CustomDropdown from "../../../component/common/DropDownButton/DropDownButton";
 import Input from "../../../component/common/input/Input";
-import { axiosClient } from "../../../utils/axiosCLient";
 import RadioButton from "../../../component/common/RadioButton/RadioButton";
 import { useSelector } from "react-redux";
 import { BsCardImage } from "react-icons/bs";

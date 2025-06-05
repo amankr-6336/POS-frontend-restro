@@ -1,6 +1,6 @@
 import axios from "axios";
 
-let baseURL='http://localhost:4001/'
+let baseURL=import.meta.env.VITE_BACKEND_URL
 
 export const axiosClient=axios.create({
     baseURL,

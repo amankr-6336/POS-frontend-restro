@@ -9,7 +9,6 @@
 // export default Input;
 
 //Styles
-import Button from "../button/Button";
 import "./Input.scss";
 
 const Input = ({

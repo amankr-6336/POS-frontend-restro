@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const StockSwitch = ({Stock,setStock,update}) => {
+const StockSwitch = ({Stock,setStock}) => {
    console.log(Stock);
 
   const toggleStock = () => {

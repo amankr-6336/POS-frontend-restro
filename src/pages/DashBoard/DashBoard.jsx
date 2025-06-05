@@ -25,12 +25,12 @@ function DashBoard() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
   const userInfo = useSelector((state) => state.UserReducer.owner);
-  const restaurantId = localStorage.getItem("restaurantId");
+  // const restaurantId = localStorage.getItem("restaurantId");
 
 
   useEffect(() => {
     // Only connect socket if restaurantId is available
-    if (!restaurantId) return;
+    if (!userInfo.restaurant._id) return;
   
     // Connect to the socket server
     socket.connect();
@@ -40,7 +40,7 @@ function DashBoard() {
       console.log("Connected to socket:", socket.id);
   
       // Join the room
-      socket.emit('joinRoom', { restaurantId });
+      socket.emit('joinRoom', { restaurantId:userInfo.restaurant._id });
     });
   
     // Listen for the 'dashboardData' event
@@ -54,7 +54,7 @@ function DashBoard() {
       socket.off('dashboardData'); // Remove the 'dashboardData' listener
       socket.disconnect(); // Optionally disconnect the socket if needed
     };
-  }, [restaurantId])
+  }, [userInfo.restaurant._id])
 
   
   useEffect(() => {
@@ -65,7 +65,7 @@ function DashBoard() {
   async function getData(filter) {
     try {
       const response = await axiosClient.get("/dashboard/get-dashboard", {
-        params: { filter: filter, restaurantId: restaurantId },
+        params: { filter: filter, restaurantId: userInfo.restaurant._id },
       });
       setData(response.result);
     } catch (error) {

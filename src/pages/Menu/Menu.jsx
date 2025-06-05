@@ -4,7 +4,6 @@ import SingleCategory from "./SingleCategory/SingleCategory";
 import "./Menu.scss";
 import SingleMenu from "./SingleMenu/SingleMenu";
 import MenuDetail from "./MenuDetail/MenuDetail";
-import Button from "../../component/common/button/Button";
 import Dialog from "../../component/common/dialog/Dialog";
 import Input from "../../component/common/input/Input";
 import AddMenu from "./addMenu/AddMenu";
@@ -16,7 +15,6 @@ import {
   handleGetCategories,
   handleGetMenuForSingleCategory,
 } from "../../services/Menu.api.js";
-import LoadingComponent from "../../component/common/LoadingComponent/LoadingComponent.jsx";
 
 function Menu() {
   const [categories, setCategories] = useState(null);

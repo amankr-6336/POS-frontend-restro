@@ -17,7 +17,6 @@ import Input from "../../component/common/input/Input";
 import Notification from "../../component/Notification/Notification";
 import restroLogo from "../../asset/optimized_restaurant_logo.png";
 import { ownerInfo } from "../../redux/UserSlice/UserReducer";
-import { addNotification } from "../../redux/notificationSlice/NotificationSlice";
 import LoadingComponent from "../../component/common/LoadingComponent/LoadingComponent";
 import Button from "../../component/common/button/Button";
 import FallBack from "../../component/common/fallback/FallBack";

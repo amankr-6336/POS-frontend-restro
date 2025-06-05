@@ -3,9 +3,9 @@ import "./Login.scss";
 import Input from "../../component/common/input/Input";
 import Button from "../../component/common/button/Button";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { addNotification } from "../../redux/notificationSlice/NotificationSlice";
-import { ownerInfo } from "../../redux/UserSlice/UserReducer";
+// import { useDispatch } from "react-redux";
+// import { addNotification } from "../../redux/notificationSlice/NotificationSlice";
+// import { ownerInfo } from "../../redux/UserSlice/UserReducer";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { handleLogin } from "../../services/Auth.api";
@@ -15,7 +15,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   
   const handleLoginApi=useApi(handleLogin);
 
