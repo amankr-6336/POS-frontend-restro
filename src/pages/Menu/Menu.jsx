@@ -90,6 +90,7 @@ function Menu() {
         name: addCategory,
         description: addcatdescription,
       });
+      console.log(data);
       if (success) {
         setCategories((prevState) => [...prevState, data.result.category]);
       }

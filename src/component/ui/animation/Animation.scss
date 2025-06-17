@@ -1,0 +1,70 @@
+.circle{
+    position: absolute;
+    top: 30%;
+    width: 290px;
+    height: 290px;
+    border-radius: 50%;
+    border: 1.4px solid #ffcb35;
+    animation: rotate 8s linear infinite;
+    z-index: 1;
+}
+
+.part{
+     z-index: 1;
+     border-radius: 50%;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     background-color: #f0efe8;
+     
+}
+
+.one{
+     padding: 1px;
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    top: 40%;
+    left: -42%;
+    img{
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+}
+.two{
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    left: 10%;
+    top: 20%;
+    padding: 1px;
+    img{
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+}
+.third{
+     padding: 0px;
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    top: 55%;
+    left: 5%;
+
+    img{
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

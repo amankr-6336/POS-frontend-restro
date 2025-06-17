@@ -2,11 +2,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 5px 12px;
+  padding: 8px 12px;
   border: 0;
   cursor: pointer;
   border-radius: 5px;
   gap: 5px;
+  width: 100%;
+  background-color: #ffca40;
   .fullWidth {
     width: 100%;
   }

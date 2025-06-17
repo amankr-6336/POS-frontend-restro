@@ -35,9 +35,9 @@ axiosClient.interceptors.response.use(
        try {
          // Use the same axiosClient instance for the refresh request
          const refreshResponse = await axiosClient.get('auth/refresh');
- 
-         if (refreshResponse.data.status === 'ok') {
-           const newAccessToken = refreshResponse.data.result.accessToken;
+         console.log(refreshResponse);
+         if (refreshResponse.status === 'success') {
+           const newAccessToken = refreshResponse.result.accessToken;
            localStorage.setItem('accessToken', newAccessToken);
  
            // Update the original request with the new access token

@@ -168,7 +168,7 @@ function Layout() {
       <div className="main">
         <div className="navigation-menu">
           <div className="logo-section">
-            {restaurantId && <img src={restroLogo} alt={restroLogo} />}
+            {userInfo.restaurant._id && <img src={restroLogo} alt={restroLogo} />}
           </div>
 
           <div className="menu">

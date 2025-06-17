@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import { handlesignin } from "../../services/Auth.api";
 import useApi from "../../hooks/useApi";
+import illustration from "../../asset/loginIllus-removebg-preview.png";
 
 function SignUp() {
   const [userName, setName] = useState("");
@@ -51,9 +52,16 @@ function SignUp() {
   }
   return (
     <div className="signup">
+    <div className="box">
+        <div className="illustration-section">
+             <img src={illustration} alt="" />
+                     <h3>Manage Sales and Inventory and other instruction</h3>
+        </div>
+    
       <div className="form-section">
         <div className="form-heading">
-          <p>Sign Up</p>
+          <h4>Welcome</h4>
+            <p>Please SignIn to Continue</p>
         </div>
         <div className="form-input">
           <Input label="Name" type="text" value={userName} onChange={setName} />
@@ -67,8 +75,8 @@ function SignUp() {
         </div>
 
         <div className="form-button-navigation">
-          <Button size="small" onClick={handleCreateAccount}>
-            Sign Up
+          <Button  onClick={handleCreateAccount}>
+            <p style={{fontWeight:"600"}}>Login</p>
           </Button>
         </div>
         <div className="other-option">
@@ -82,10 +90,11 @@ function SignUp() {
             }}
           />
         </div>
-        <p>
+        <p style={{fontSize:"0.7rem",fontWeight:"500",color:"#808080"}}>
           Already have an Account ?{" "}
           <strong onClick={() => navigate("/login")}>Login</strong>
         </p>
+      </div>
       </div>
     </div>
   );

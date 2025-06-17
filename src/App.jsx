@@ -23,7 +23,6 @@ import { SocketProvider } from "./utils/SocketContextProvider";
 // import NotificationComponent from "./component/Notification";
 import { useNotifications } from "./hooks/useNotification";
 
-
 const socket = io("http://localhost:4001", { autoConnect: false });
 
 function App() {

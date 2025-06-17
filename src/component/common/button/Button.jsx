@@ -3,9 +3,9 @@ import classnames from "classnames";
 import "./Button.scss";
 
 const Button = ({
-  type = "primary",
+  type = "",
   variant,
-  size = "medium",
+  size = "",
   className,
   disabled = false,
   icon,

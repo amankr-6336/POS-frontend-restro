@@ -1,0 +1,16 @@
+.doted-circle{
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: 1.4px dashed #ffcb35;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+}
+
+img{
+    width: 100px;
+    height: fit-content;
+    object-fit: contain;
+}

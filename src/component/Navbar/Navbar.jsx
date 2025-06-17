@@ -10,7 +10,7 @@ function Navbar() {
 
   useEffect(()=>{
    const hanldescroll=()=>{
-    if(window.scrollY>80){
+    if(window.scrollY>500){
       setScroll(true);
     }
     else{

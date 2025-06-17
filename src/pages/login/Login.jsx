@@ -10,18 +10,22 @@ import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { handleLogin } from "../../services/Auth.api";
 import useApi from "../../hooks/useApi";
+import illustration from "../../asset/loginIllus-removebg-preview.png";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   // const dispatch = useDispatch();
-  
-  const handleLoginApi=useApi(handleLogin);
+
+  const handleLoginApi = useApi(handleLogin);
 
   async function handleLoginfunction() {
     try {
-      const {success,data}= await handleLoginApi.execute({email,password});
+      const { success, data } = await handleLoginApi.execute({
+        email,
+        password,
+      });
       if (success) {
         localStorage.setItem("accessToken", data.result.accessToken);
         navigate("/dashboard/setting");
@@ -32,7 +36,7 @@ function Login() {
       console.log(error);
     }
   }
-  
+
   // async function getNotification(restaurantId) {
   //   try {
   //     const response = await axiosClient.get("/notification/get-notice", {
@@ -49,44 +53,55 @@ function Login() {
 
   return (
     <div className="login">
-      <div className="form-section">
-        <div className="form-heading">
-          <p>Login</p>
-        </div>
-        <div className="form-input">
-          <Input label="Email" type="email" value={email} onChange={setEmail} />
-          <Input
-            label="Password"
-            type="password"
-            value={password}
-            onChange={setPassword}
-          />
+      <div className="box">
+        <div className="illustration-section">
+          <img src={illustration} alt="" />
+          <h3>Manage Sales and Inventory and other instruction</h3>
         </div>
 
-        <div className="form-button-navigation">
-          <Button size="small" onClick={handleLoginfunction}>
-            Login
-          </Button>
-        </div>
+        <div className="form-section">
+          <div className="form-heading">
+            <h4>Welcome Back</h4>
+            <p>Please login to Continue</p>
+          </div>
+          <div className="form-input">
+            <Input
+              label="Email"
+              type="email"
+              value={email}
+              onChange={setEmail}
+            />
+            <Input
+              label="Password"
+              type="password"
+              value={password}
+              onChange={setPassword}
+            />
+          </div>
 
-        <div className="other-option">
-          <GoogleLogin
-            onSuccess={(credentialResponse) => {
-              const decoded = jwtDecode(credentialResponse.credential);
-              console.log("User Info:", decoded);
-              console.log(credentialResponse.credential);
-              
-            }}
-            onError={() => {
-              console.log("login failed");
-            }}
-          />
-        </div>
+          <div className="form-button-navigation">
+            <Button  onClick={handleLoginfunction}>
+              <p style={{fontWeight:"600"}}>Login</p>
+            </Button>
+          </div>
+          <div className="other-option">
+            <GoogleLogin
+              onSuccess={(credentialResponse) => {
+                const decoded = jwtDecode(credentialResponse.credential);
+                console.log("User Info:", decoded);
+                console.log(credentialResponse.credential);
+              }}
+              onError={() => {
+                console.log("login failed");
+              }}
+            />
+          </div>
 
-        <p>
-          New user ? click on{" "}
-          <strong onClick={() => navigate("/signup")}> Signup </strong>
-        </p>
+          <p style={{fontSize:"0.7rem",fontWeight:"500",color:"#808080"}}>
+            New user ? click on{" "}
+            <strong onClick={() => navigate("/signup")}> Signup </strong>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -29,8 +29,8 @@ function Table() {
     });
     console.log(success, data);
     if (success) {
-      setTableList(data?.result?.tables);
-      setSelectedTable(data?.result?.tables[0]);
+      setTableList(data?.result);
+      setSelectedTable(data?.result[0]);
     } else {
       alert(getTableApi.error || "Failed to fetch restaurants.");
     }
@@ -74,7 +74,7 @@ function Table() {
       <div className="bottom-section">
         <div className="listing-section">
           <div className="table-section">
-            {tableList?.map((item, index) => (
+            {tableList && tableList?.map((item, index) => (
               <SingleTableComponent
                 key={index}
                 data={item}

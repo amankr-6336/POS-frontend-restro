@@ -64,13 +64,13 @@ function MenuDetail({ data, update }) {
     console.log("Selected Value:", value);
     setType(value);
   };
-  useEffect(() => {
-    if (Stock !== undefined) {
-      console.log("Stock changed to:", Stock); // Logs the updated value
-      // handleUpdateMenu(); // Call update when Stock changes
-      handleStockChangeMenu();
-    }
-  }, [Stock]);
+  // useEffect(() => {
+  //   if (Stock !== undefined) {
+  //     console.log("Stock changed to:", Stock); // Logs the updated value
+  //     // handleUpdateMenu(); // Call update when Stock changes
+  //     handleStockChangeMenu();
+  //   }
+  // }, [Stock]);
 
   async function handleUpdateMenu() {
     console.log(Stock);
@@ -93,13 +93,13 @@ function MenuDetail({ data, update }) {
       console.log(error);
     }
   }
-    async function handleStockChangeMenu() {
+    async function handleStockChangeMenu(state) {
       console.log(Stock);
       try {
         const response = await axiosClient.patch("/menu/update-menu", {
           menuId: data._id,
           updates: {
-            isStock:Stock
+            isStock:state
           },
         });
         update({ category: data.categoryId, menuId: data._id });
@@ -137,7 +137,7 @@ function MenuDetail({ data, update }) {
       </div>
       <div className="menu-price">
         <p id="price">Rs {data?.price}</p>
-        <StockSwitch Stock={Stock} setStock={setStock}  update={handleUpdateMenu}/>
+        <StockSwitch Stock={Stock} setStock={setStock}  update={handleStockChangeMenu}/>
       </div>
 
       <Dialog

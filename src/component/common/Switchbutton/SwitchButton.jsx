@@ -1,12 +1,13 @@
 import React from 'react';
 
-const StockSwitch = ({Stock,setStock}) => {
+const StockSwitch = ({Stock,setStock,update}) => {
    console.log(Stock);
 
   const toggleStock = () => {
     console.log("Before Toggle:", Stock);
     const newStockValue = !Stock;
     setStock(newStockValue);
+    update(newStockValue);
     console.log("After Toggle:", newStockValue);
    
   };
