@@ -6,7 +6,7 @@ function FallBack({OnOpen}) {
   return (
     <div className="fallback">
          <h2>Add Restaurant to Avail Option</h2>
-        <Button onClick={OnOpen}>Add Restaurant</Button>
+        <Button size='medium' type='primary' onClick={OnOpen}>Add Restaurant</Button>
     </div>
   )
 }

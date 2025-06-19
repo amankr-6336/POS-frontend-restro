@@ -23,7 +23,7 @@ import { SocketProvider } from "./utils/SocketContextProvider";
 // import NotificationComponent from "./component/Notification";
 import { useNotifications } from "./hooks/useNotification";
 
-const socket = io("http://localhost:4001", { autoConnect: false });
+const socket = io("https://api.restopia.shop", { autoConnect: false });
 
 function App() {
   const userInfo=useSelector((state)=>state.UserReducer.owner);

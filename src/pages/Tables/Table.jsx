@@ -74,7 +74,7 @@ function Table() {
       <div className="bottom-section">
         <div className="listing-section">
           <div className="table-section">
-            {tableList && tableList?.map((item, index) => (
+            {getTableApi.data && tableList?.map((item, index) => (
               <SingleTableComponent
                 key={index}
                 data={item}

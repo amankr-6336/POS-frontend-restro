@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import './Navbar.scss'
-import logo from '../../asset/logo.png'
 import Button from '../common/button/Button';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,17 +29,17 @@ function Navbar() {
   return (
     <div className={`navbar ${scroll? "shadow":""}`}>
      <div className="logo">
-         <img src={logo} alt="" />
+         <h2>Resto<span style={{color:"#c8151d"}}>pia</span></h2>
      </div>
      <div className="nav-list">
-         <ul>
+         {/* <ul>
             <li>Pos</li>
             <li>Outlet types</li>
             <li>Resources</li>
-         </ul>
+         </ul> */}
      </div>
      <div className="user-control">
-       <Button onClick={handleNavigation} type='border'> Login </Button>
+       <Button onClick={handleNavigation} type='primary'> Register </Button>
      </div>
     </div>
   )
